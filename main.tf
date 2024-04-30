@@ -39,7 +39,7 @@ resource "aws_subnet" "sub_1_ec2_lb" {
 
 resource "aws_subnet" "sub_2_ec2_lb" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = "10.0.2.0/24"
   availability_zone = "eu-west-3c"
   tags = {
     Name = "lb_subnet"
@@ -48,7 +48,7 @@ resource "aws_subnet" "sub_2_ec2_lb" {
 
 resource "aws_subnet" "RDS_sub1" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.2.0/28"
+  cidr_block = "10.0.3.0/28"
   availability_zone = "eu-west-3b"
   tags = {
     Name = "RDS_sub1"
@@ -57,7 +57,7 @@ resource "aws_subnet" "RDS_sub1" {
 
 resource "aws_subnet" "RDS_sub2" {
   vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.3.0/28"
+  cidr_block = "10.0.4.0/28"
   availability_zone = "eu-west-3c"
   tags = {
     Name = "RDS_sub2"
