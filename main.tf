@@ -1,7 +1,21 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "= 5.47.0"
+    }
+  }
+
+
+  backend "gitlab" {
+    repository = "ara1504621/terraform-test"
+    branch = "main"  
+    token = ${GITLAB_TOKEN}
+  }
+}
+
 provider "aws" {
-  region = "eu-west-3"
-  access_key = "AKIAYM4CN735ZH4AQ5DO"
-  secret_key = "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"
+  region = "eu-west-3" 
 }
 
 resource "aws_vpc" "main_vpc" {
