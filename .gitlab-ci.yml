@@ -5,9 +5,45 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+# stages:
+# - test
+# sast:
+#   stage: test
+# include:
+# - template: Security/SAST.gitlab-ci.yml
+
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  - validate
+  - plan
+  - apply
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+before_script:
+  - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+  - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  - rm -rf .terraform
+  - terraform --version
+  - terraform init
+validate:
+  stage: validate
+  script:
+    - terraform validate
+plan:
+  stage: plan
+  script:
+    - terraform plan -out "planfile"
+  dependencies:
+    - validate
+  artifacts:
+    paths:
+      - planfile
+apply:
+  stage: apply
+  script:
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan
+  when: manual
