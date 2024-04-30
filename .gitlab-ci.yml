@@ -33,12 +33,6 @@ validate:
   script:
     - terraform fmt -recursive
     - terraform validate
-destroy:
-  stage: destroy
-  script:
-    - terraform destroy --auto-approve
-  dependencies:
-    - validate
 plan:
   stage: plan
   script:
