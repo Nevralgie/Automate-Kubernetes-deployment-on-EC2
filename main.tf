@@ -9,11 +9,11 @@ terraform {
 
 
   backend "http" {
-    # address        = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state"
-    # lock_address   = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
-    # unlock_address = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
-    # username       = "gitlab-ci-token"
-    # password       = var.GITLAB_TOKEN
+    address        = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state"
+    lock_address   = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
+    unlock_address = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
+    username       = "gitlab-ci-token"
+    password       = glpat-4sRgzkxWmdr1xhGx8j2q
     }
   
 }
