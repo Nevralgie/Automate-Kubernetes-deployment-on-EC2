@@ -4,7 +4,7 @@ terraform {
       source  = "hashicorp/aws"
       version = "= 5.47.0"
     }
-  
+  }
 
 
 
@@ -15,7 +15,7 @@ terraform {
     username       = "gitlab-ci-token"
     password       = var.GITLAB_TOKEN
     }
-  }
+  
 }
 provider "aws" {
   region = "eu-west-3" 
