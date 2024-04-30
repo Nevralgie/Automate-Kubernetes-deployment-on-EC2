@@ -30,7 +30,7 @@ before_script:
 validate:
   stage: validate
   script:
-    - terraform fmt -check -recursive -write=false -diff
+    - terraform fmt -check -recursive -write=true -diff
     - terraform validate
 plan:
   stage: plan
