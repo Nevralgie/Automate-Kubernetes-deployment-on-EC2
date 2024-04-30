@@ -12,7 +12,7 @@ terraform {
     address        = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state"
     lock_address   = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
     unlock_address = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
-    username       = "ara"
+    username       = "Terraform access token"
     password       = "glpat-4sRgzkxWmdr1xhGx8j2q"
     }
   
