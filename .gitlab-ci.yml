@@ -14,7 +14,6 @@
 
 stages:
   - validate
-  - destroy
   - plan
   - apply
 image:
@@ -38,7 +37,7 @@ plan:
   script:
     - terraform plan -out "planfile"
   dependencies:
-    - destroy
+    - validate
   artifacts:
     paths:
       - planfile
