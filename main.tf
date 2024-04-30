@@ -14,9 +14,9 @@ terraform {
     unlock_address = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
     username       = "gitlab-ci-token"
     password       = var.GITLAB_TOKEN
+    }
   }
 }
-
 provider "aws" {
   region = "eu-west-3" 
 }
