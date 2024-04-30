@@ -4,11 +4,16 @@ terraform {
       source  = "hashicorp/aws"
       version = "= 5.47.0"
     }
-  }
+  
+
 
 
   backend "http" {
-    
+    address        = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state"
+    lock_address   = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
+    unlock_address = "https://gitlab.com/ara1504621/terraform-test/terraform/state/ppro_state/lock"
+    username       = "gitlab-ci-token"
+    password       = var.GITLAB_TOKEN
   }
 }
 
