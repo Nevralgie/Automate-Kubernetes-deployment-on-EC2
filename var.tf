@@ -16,7 +16,7 @@ variable "worker_instance_number" {
   default = 4
 }
 
-variable "gitlab_token" {
-  type = string
-  default = "${env("GITLAB_TOKEN")}"
-}
+# variable "gitlab_token" {
+#   type = string
+#   default = "${env("GITLAB_TOKEN")}"
+# }
