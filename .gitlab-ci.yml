@@ -14,6 +14,7 @@
 
 stages:
   - validate
+  - destroy
   - plan
   - apply
 image:
@@ -32,12 +33,18 @@ validate:
   script:
     - terraform fmt -recursive
     - terraform validate
+destroy:
+  stage: destroy
+  script:
+    - terraform destroy --auto-approve
+  dependencies:
+    - validate
 plan:
   stage: plan
   script:
     - terraform plan -out "planfile"
   dependencies:
-    - validate
+    - destroy
   artifacts:
     paths:
       - planfile
