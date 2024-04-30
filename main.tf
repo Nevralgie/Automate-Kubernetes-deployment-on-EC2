@@ -7,7 +7,7 @@ terraform {
   }
 
 
-  backend "gitlab" {
+  backend {
     repository = "ara1504621/terraform-test"
     branch = "main"  
     token = ${GITLAB_TOKEN}
