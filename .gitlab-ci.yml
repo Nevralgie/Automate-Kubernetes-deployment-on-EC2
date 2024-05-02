@@ -1,17 +1,3 @@
-# # You can override the included template(s) by including variable overrides
-# # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
-# # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# # Note that environment variables can be set in several places
-# # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-# # stages:
-# # - test
-# # sast:
-# #   stage: test
-# # include:
-# # - template: Security/SAST.gitlab-ci.yml
-
 variables:
   GITLAB_TOKEN: $CI_PIPELINE_TOKEN
 
@@ -38,6 +24,10 @@ validate:
   script:
     - terraform fmt -recursive
     - terraform validate
+  artifacts:
+    paths:
+      - aws.cfg
+  when: on_success
 
 plan:
   stage: plan
@@ -80,51 +70,31 @@ provision:
   stage: provision
   image: python:3.9.17-slim-bullseye
   before_script:
-  - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-  - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-  ##
-  ## Install ssh-agent if not already installed, it is required by Docker.
-  ## (change apt-get to yum if you use an RPM-based image)
-  ##
-  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-
-  ##
-  ## Run ssh-agent (inside the build environment)
-  ##
-  - eval $(ssh-agent -s)
-
-  ##
-  ## Give the right permissions, otherwise ssh-add will refuse to add files
-  ## Add the SSH key stored in SSH_PRIVATE_KEY file type CI/CD variable to the agent store
-  ##
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-  ##
-  ## Create the SSH directory and give it the right permissions
-  ##
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
+    - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - export AWS_REGION=sa-east-1
+    - export AWS_OUTPUT=text
+    - export ANSIBLE_CONFIG=ansible.cfg
+    - cat > aws.cfg << EOF
+[default]
+aws_access_key_id=$AWS_ACCESS_KEY
+aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+region=$AWS_REGION
+output=$AWS_OUTPUT
+EOF
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
   script:
-  - apt-get update && apt-get install ansible -y
-  - apt-get install python3-boto3 awscli -y
-  - export ANSIBLE_CONFIG=ansible.cfg
-  - |
-    cat > aws.cfg << EOF
-    [default]
-    aws_access_key_id=$AWS_ACCESS_KEY_ID
-    aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-    region=$AWS_REGION
-    output=$AWS_OUTPUT
-    EOF
-    - sed -i 's/aws_access_key_id=.*/aws_access_key_id='"$AWS_ACCESS_KEY_ID"'/' aws.cfg
-    - sed -i 's/aws_secret_access_key=.*/aws_secret_access_key='"$AWS_SECRET_ACCESS_KEY"'/' aws.cfg
-    - sed -i 's/region=.*/region='"$AWS_REGION"'/' aws.cfg
-    - sed -i 's/output=.*/output='"$AWS_OUTPUT"'/' aws.cfg
-  - aws sts get-caller-identity
-  - ansible --version
-  - ansible -m ping all
-  - ansible-inventory --list
-  - ansible-inventory --graph
-
+    - apt-get update && apt-get install ansible -y
+    - apt-get install python3-boto3 awscli -y
+    - aws sts get-caller-identity
+    - ansible --version
+    - ansible -m ping all
+    - ansible-inventory --list
+    - ansible-inventory --graph
   dependencies:
     - apply
   when: manual
@@ -142,37 +112,3 @@ destroy:
   dependencies:
     - apply
   when: manual
-
-
-# include:
-#   - remote: https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
-#   - remote: https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Jobs/SAST-IaC.gitlab-ci.yml
-
-# stages:
-#   - validate
-#   - test
-#   - build
-#   - deploy
-#   - cleanup
-
-# fmt:
-#   extends: .terraform:fmt
-#   needs: []
-
-# validate:
-#   extends: .terraform:validate
-#   needs: []
-
-# build:
-#   extends: .terraform:build
-#   environment:
-#     name: $TF_STATE_NAME
-#     action: prepare
-
-# deploy:
-#   extends: .terraform:deploy
-#   dependencies:
-#     - build
-#   environment:
-#     name: $TF_STATE_NAME
-#     action: start
