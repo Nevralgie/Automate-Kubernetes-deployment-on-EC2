@@ -22,12 +22,6 @@ stages:
   - test
   - destroy
 
-image:
-  name: hashicorp/terraform:latest
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-
 before_script:
   - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
   - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -56,10 +50,19 @@ apply:
     - plan
   when: manual
 
-test:
-  stage: test
+provision:
+  stage: provision
+  image:
+    name: registry.gitlab.com/dockerfiles6/ansible-lint:latest
+    entrypoint: [""]
   script:
-    - ssh ubuntu@10.0.1.128 "exit"
+  - chmod 755 .
+  - mkdir /root/.ssh
+  - cp /builds/ara57372801/'Terraform test'.tmp/id_ed25519 /root/.ssh/id_ed25519
+  - chmod 0600 /root/.ssh/id_ed25519
+  - ansible -m ping all
+  dependencies:
+    - apply
 
 destroy:
   stage: destroy
