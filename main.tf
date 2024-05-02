@@ -171,6 +171,7 @@ resource "aws_instance" "control_plane" {
 
   tags = {
     Name = "Controlplane ${count.index + 1}"
+    environment = ${"var.environment"}
   }
 }
 
@@ -187,6 +188,7 @@ resource "aws_instance" "workers" {
 
   tags = {
     Name = "K8s Worker ${count.index + 1}"
+    environment = ${"var.environment"}
   }
 }
 
