@@ -19,6 +19,7 @@ stages:
   - validate
   - plan
   - apply
+  - test
   - destroy
 
 image:
@@ -54,6 +55,9 @@ apply:
   dependencies:
     - plan
   when: manual
+
+test:
+  - ssh ubuntu@10.0.1.128
 
 destroy:
   stage: destroy
