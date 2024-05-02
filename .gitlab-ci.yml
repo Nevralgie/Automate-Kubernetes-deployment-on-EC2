@@ -76,12 +76,12 @@ provision:
     - export AWS_OUTPUT=text
     - export ANSIBLE_CONFIG=ansible.cfg
     - cat > aws.cfg << EOF
-[default]
-aws_access_key_id=$AWS_ACCESS_KEY
-aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
-region=$AWS_REGION
-output=$AWS_OUTPUT
-EOF
+     [default]
+     aws_access_key_id=$AWS_ACCESS_KEY
+     aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+     region=$AWS_REGION
+     output=$AWS_OUTPUT
+     EOF
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
