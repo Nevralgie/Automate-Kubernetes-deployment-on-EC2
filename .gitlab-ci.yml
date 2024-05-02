@@ -59,7 +59,7 @@ apply:
 test:
   stage: test
   script:
-    - ssh ubuntu@10.0.1.128
+    - ssh ubuntu@10.0.1.128 "exit"
 
 destroy:
   stage: destroy
