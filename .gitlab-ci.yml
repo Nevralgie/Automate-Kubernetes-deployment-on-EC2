@@ -72,7 +72,7 @@ provision:
   before_script:
     - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
     - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    - export AWS_REGION=sa-east-1
+    - export AWS_REGION=eu-west-3
     - export AWS_OUTPUT=text
     - export ANSIBLE_CONFIG=ansible.cfg
     - cat > aws.cfg << EOF
