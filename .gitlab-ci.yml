@@ -46,14 +46,11 @@ plan:
     - terraform plan
   dependencies:
     - validate
-  artifacts:
-    paths:
-      - planfile
 
 apply:
   stage: apply
   script:
-    - terraform apply -input=false
+    - terraform apply --auto-approve
   dependencies:
     - plan
   when: manual
