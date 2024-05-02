@@ -19,7 +19,7 @@ stages:
   - validate
   - plan
   - apply
-  - test
+  - provision
   - destroy
 
 before_script:
