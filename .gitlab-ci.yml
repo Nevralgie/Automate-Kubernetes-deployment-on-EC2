@@ -31,12 +31,24 @@ before_script:
 
 validate:
   stage: validate
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
   script:
     - terraform fmt -recursive
     - terraform validate
 
 plan:
   stage: plan
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
   script:
     - terraform plan
   dependencies:
@@ -44,6 +56,12 @@ plan:
 
 apply:
   stage: apply
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
   script:
     - terraform apply --auto-approve
   dependencies:
@@ -59,8 +77,11 @@ provision:
   - chmod 755 .
   - mkdir /root/.ssh
   - cp /builds/ara57372801/'Terraform test'.tmp/ansible_key /root/.ssh/ansible_key
-  - chmod 0600 /root/.ssh/id_ed25519
+  - chmod 0600 /root/.ssh/ansible_key
   - ansible -m ping all
+  - ansible-inventory --list
+  - ansible-inventory --graph
+
   dependencies:
     - apply
 
