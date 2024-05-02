@@ -58,7 +58,7 @@ provision:
   script:
   - chmod 755 .
   - mkdir /root/.ssh
-  - cp /builds/ara57372801/'Terraform test'.tmp/id_ed25519 /root/.ssh/id_ed25519
+  - cp /builds/ara57372801/'Terraform test'.tmp/ansible_key /root/.ssh/ansible_key
   - chmod 0600 /root/.ssh/id_ed25519
   - ansible -m ping all
   dependencies:
