@@ -70,7 +70,10 @@ provision:
   stage: provision
   image: python:3.9.17-slim-bullseye
   before_script:
-    - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - export AWS_DEFAULT_REGION=eu-west-3
+    - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - export ANSIBLE_CONFIG=ansible.cfg
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
@@ -83,9 +86,6 @@ provision:
     - apt-get install python3-boto3 awscli -y
     - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
     - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.ini
-    - export AWS_DEFAULT_REGION=eu-west-3
-    - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - aws sts get-caller-identity
     - ansible --version
     - ansible -m ping all
