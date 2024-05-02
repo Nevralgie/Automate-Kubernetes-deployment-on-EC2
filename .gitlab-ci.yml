@@ -75,12 +75,6 @@ provision:
     - export AWS_REGION=eu-west-3
     - export AWS_OUTPUT=text
     - export ANSIBLE_CONFIG=ansible.cfg
-    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-
-    - sed -i "s|aws_access_key_id = .*|aws_access_key_id = $AWS_ACCESS_KEY|" ~/.aws/credentials
-    - sed -i "s|aws_secret_access_key = .*|aws_secret_access_key = $AWS_SECRET_ACCESS_KEY|" ~/.aws/credentials
-
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -89,6 +83,10 @@ provision:
   script:
     - apt-get update && apt-get install ansible -y
     - apt-get install python3-boto3 awscli -y
+    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+    - sed -i "s|aws_access_key_id = .*|aws_access_key_id = $AWS_ACCESS_KEY|" ~/.aws/credentials
+    - sed -i "s|aws_secret_access_key = .*|aws_secret_access_key = $AWS_SECRET_ACCESS_KEY|" ~/.aws/credentials
     - aws sts get-caller-identity
     - ansible --version
     - ansible -m ping all
