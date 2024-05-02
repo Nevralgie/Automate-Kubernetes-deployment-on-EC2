@@ -103,7 +103,7 @@ provision:
   ##
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
-
+  - pip install -y botocore boto3
   script:
   - apt-get update && apt-get install ansible -y
   - ansible --version
