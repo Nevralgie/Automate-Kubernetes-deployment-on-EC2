@@ -3,6 +3,9 @@ plugin: amazon.aws.aws_ec2
 aws_access_key: ${AWS_ACCESS_KEY_ID}
 aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
 aws_region: eu-west-3
-include_filters:
-  - tag:environment:
-      - 'Dev'
+keyed_groups:
+  - key: tags
+    prefix: tag
+# include_filters:
+#   - tag:environment:
+#       - 'Dev'
