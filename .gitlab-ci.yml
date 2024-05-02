@@ -57,6 +57,10 @@ apply:
     - plan
   when: manual
 
+destroy:
+  stage: destroy
+  extends: .destroy
+
 
 # include:
 #   - remote: https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
