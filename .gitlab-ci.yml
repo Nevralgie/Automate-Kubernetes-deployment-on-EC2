@@ -81,14 +81,9 @@ provision:
   script:
     - apt-get update && apt-get install ansible -y
     - apt-get install python3-boto3 awscli -y
-    - mkdir -p ~/.aws
-    - echo "[profile my_profile]" > ~/.aws/config
-    - echo "region = us-west-3" >> ~/.aws/config
-    - echo "output = text" >> ~/.aws/config
-    - echo "[my_profile]" > ~/.aws/credentials
-    - echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-    - echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-    - aws --profile my_profile ec2 describe-instances
+    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+    - aws configure set region eu-west-3
     - aws sts get-caller-identity
     - ansible --version
     - ansible -m ping all
