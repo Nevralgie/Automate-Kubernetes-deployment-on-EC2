@@ -81,8 +81,8 @@ provision:
   script:
     - apt-get update && apt-get install ansible -y
     - apt-get install python3-boto3 awscli -y
-    - wget -O https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
-    - wget -O https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.ini
+    - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
+    - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.ini
     - export AWS_REGION='eu-west-3'
     - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
     - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
