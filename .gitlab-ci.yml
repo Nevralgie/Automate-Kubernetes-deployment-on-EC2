@@ -57,7 +57,9 @@ apply:
   when: manual
 
 test:
-  - ssh ubuntu@10.0.1.128
+  stage: test
+  script:
+    - ssh ubuntu@10.0.1.128
 
 destroy:
   stage: destroy
