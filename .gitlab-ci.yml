@@ -106,7 +106,9 @@ provision:
   script:
   - apt-get update && apt-get install ansible -y
   - export ANSIBLE_CONFIG=ansible.cfg
-  - apt-get install python3-boto3 -y
+  - apt-get install python3-boto3 awscli -y
+  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+  - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
   - ansible --version
   - ansible -m ping all
   - ansible-inventory --list
