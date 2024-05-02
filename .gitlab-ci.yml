@@ -107,9 +107,18 @@ provision:
   - apt-get update && apt-get install ansible -y
   - apt-get install python3-boto3 awscli -y
   - export ANSIBLE_CONFIG=ansible.cfg
-  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-  - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-  - aws configure set aws_session_token FwoGZXIvYXdzEB4aDFvSzHfgt1KSdWcjRCKCAeeszYRFZGwSEWs+rYQx/QRZ2M+7Nvi8/6UmDxvqHlx+R+Lkb7eXMzvM7j0R1LZKzz47+VRplQFZjcvdbsAZyn3EME/c9r3YaP3HmGWvVx9XQJNqMLnTEqAUrOUhbxyMlcLCWCq5RLqYzUWKSjUf8CLjgMwjRoEqMTh5UkZUXbfDmdgo2OzPsQYyKDcBTg3MhkbRFEiwcmRMgDa53Aw8l69gfYhhzKt+TIXjsok9IDOd5EU=
+  - |
+    cat > aws.cfg << EOF
+    [default]
+    aws_access_key_id=$AWS_ACCESS_KEY_ID
+    aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+    region=$AWS_REGION
+    output=$AWS_OUTPUT
+    EOF
+    - sed -i 's/aws_access_key_id=.*/aws_access_key_id='"$AWS_ACCESS_KEY_ID"'/' aws.cfg
+    - sed -i 's/aws_secret_access_key=.*/aws_secret_access_key='"$AWS_SECRET_ACCESS_KEY"'/' aws.cfg
+    - sed -i 's/region=.*/region='"$AWS_REGION"'/' aws.cfg
+    - sed -i 's/output=.*/output='"$AWS_OUTPUT"'/' aws.cfg
   - aws sts get-caller-identity
   - ansible --version
   - ansible -m ping all
