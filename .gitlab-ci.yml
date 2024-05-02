@@ -14,6 +14,7 @@
 
 variables:
   GITLAB_TOKEN: $CI_PIPELINE_TOKEN
+  SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY
 
 stages:
   - validate
@@ -83,7 +84,7 @@ provision:
   script:
   - chmod 755 .
   - mkdir /root/.ssh
-  - cp /builds/ara57372801/'Terraform test'.tmp/ansible_key /root/.ssh/ansible_key
+  - cp /builds/ara1504621/terraform-test/$SSH_PRIVATE_KEY /root/.ssh/ansible_key
   - chmod 0600 /root/.ssh/ansible_key
   - apt-get update && apt-get install ansible -y
   - ansible --version
@@ -94,7 +95,7 @@ provision:
   dependencies:
     - apply
   when: manual
-  
+
 destroy:
   stage: destroy
   before_script:
