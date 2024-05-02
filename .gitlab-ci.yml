@@ -81,14 +81,33 @@ provision:
   stage: provision
   image: python:3.9.17-slim-bullseye
   before_script:
-  - export SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
   - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
   - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  before_script:
+  ##
+  ## Install ssh-agent if not already installed, it is required by Docker.
+  ## (change apt-get to yum if you use an RPM-based image)
+  ##
+  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+
+  ##
+  ## Run ssh-agent (inside the build environment)
+  ##
+  - eval $(ssh-agent -s)
+
+  ##
+  ## Give the right permissions, otherwise ssh-add will refuse to add files
+  ## Add the SSH key stored in SSH_PRIVATE_KEY file type CI/CD variable to the agent store
+  ##
+  - chmod 400 "$SSH_PRIVATE_KEY"
+  - ssh-add "$SSH_PRIVATE_KEY"
+
+  ##
+  ## Create the SSH directory and give it the right permissions
+  ##
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
   script:
-  - chmod 755 .
-  - mkdir /root/.ssh
-  - cp /builds/ara1504621/terraform-test/{SSH_PRIVATE_KEY} /root/.ssh/ansible_key
-  - chmod 0600 /root/.ssh/ansible_key
   - apt-get update && apt-get install ansible -y
   - ansible --version
   - ansible -m ping all
