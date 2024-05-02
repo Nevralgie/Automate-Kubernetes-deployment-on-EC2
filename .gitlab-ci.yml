@@ -70,14 +70,16 @@ apply:
 
 provision:
   stage: provision
-  image:
-    name: registry.gitlab.com/dockerfiles6/ansible-lint:latest
-    entrypoint: [""]
+  image: python:3.9.17-slim-bullseye
+    
   script:
   - chmod 755 .
   - mkdir /root/.ssh
   - cp /builds/ara57372801/'Terraform test'.tmp/ansible_key /root/.ssh/ansible_key
   - chmod 0600 /root/.ssh/ansible_key
+  - apt-get update && apt-get install ansible -y
+  - ansible --version
+  - ansible-playbook ansible-playbook.yml
   - ansible -m ping all
   - ansible-inventory --list
   - ansible-inventory --graph
