@@ -75,10 +75,8 @@ provision:
     - export AWS_REGION=eu-west-3
     - export AWS_OUTPUT=text
     - export ANSIBLE_CONFIG=ansible.cfg
-    - sed -i "s|aws_access_key_id=.*|aws_access_key_id=$AWS_ACCESS_KEY|" aws.cfg
-    - sed -i "s|aws_secret_access_key=.*|aws_secret_access_key=$AWS_SECRET_ACCESS_KEY|" aws.cfg
-    - sed -i "s|region=.*|region=$AWS_REGION|" aws.cfg
-    - sed -i "s|output=.*|output=$AWS_OUTPUT|" aws.cfg
+    - sed -i "s|aws_access_key_id = .*|aws_access_key_id = $AWS_ACCESS_KEY|" ~/.aws/credentials
+    - sed -i "s|aws_secret_access_key = .*|aws_secret_access_key = $AWS_SECRET_ACCESS_KEY|" ~/.aws/credentials
 
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
