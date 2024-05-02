@@ -63,7 +63,8 @@ apply:
   script:
     - terraform apply --auto-approve
   dependencies:
-    - plan
+    # - plan
+    - validate
   when: manual
 
 provision:
@@ -86,7 +87,7 @@ provision:
     - apt-get install python3-boto3 awscli -y
     - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
     - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.ini
-    - - sed -i 's/^regions =.*/regions = eu-west-3/' ec2.ini
+    - sed -i 's/^regions =.*/regions = eu-west-3/' ec2.ini
     # Alternatively, you can use a variable for the custom value
     # - sed -i "s/^regions =.*/regions = $YOUR_CUSTOM_VALUE/" ec2.ini
     - cat ec2.ini  # For debugging, to verify the changes
