@@ -19,6 +19,7 @@ stages:
   - validate
   - plan
   - apply
+  - destroy
 
 image:
   name: hashicorp/terraform:latest
@@ -57,9 +58,13 @@ apply:
     - plan
   when: manual
 
-destroy:
+desrtoy:
   stage: destroy
-  extends: .destroy
+  script:
+    - terraform destroy -input=false "planfile"
+  dependencies:
+    - apply
+  when: manual
 
 
 # include:
