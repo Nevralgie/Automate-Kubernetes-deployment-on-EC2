@@ -106,7 +106,7 @@ provision:
   script:
   - apt-get update && apt-get install ansible -y
   - export ANSIBLE_CONFIG=ansible.cfg
-  - apt-get install python-boto3
+  - apt-get install python3-boto3
   - ansible --version
   - ansible -m ping all
   - ansible-inventory --list
