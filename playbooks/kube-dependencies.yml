@@ -1,4 +1,3 @@
----
 - name: Configure Kubernetes prerequisites
   hosts: all  # Target all hosts defined in your Ansible inventory
   become: true  # Run tasks with sudo privileges
