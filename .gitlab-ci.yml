@@ -114,6 +114,7 @@ provision:
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
+    - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml
   dependencies:
     - apply
   when: manual
