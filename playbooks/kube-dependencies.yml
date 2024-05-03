@@ -1,3 +1,4 @@
+---
 - name: Configure Kubernetes prerequisites
   hosts: all  # Target all hosts defined in your Ansible inventory
   become: true  # Run tasks with sudo privileges
@@ -67,11 +68,12 @@
         - kubeadm=1.29.0-1.1
         - kubectl=1.29.0-1.1
 
-    # Hold Kubernetes packages at current version
+    # Hold Kubernetes packages at current version using dpkg
     - name: Hold Kubernetes packages at current version
-      apt_mark:
-        name: "{{ item }}"  # Package name
-        state: hold  # Hold the package at its current version
+      command: dpkg --set-selections
+      args:
+        name: "{{ item }}"
+        state: hold
       loop:
         - kubelet
         - kubeadm
