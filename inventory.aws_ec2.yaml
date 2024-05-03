@@ -8,12 +8,12 @@ profile: aws_profile
 remote_user: ubuntu
 regions: 
   - eu-west-3
-keyed_groups:
-  - key: tags
-    prefix: tag
-# include_filters:
-#   - tag:environment:
-#       - 'Dev'
+# keyed_groups:
+#   - key: tags
+#     prefix: tag
+include_filters:
+  - tag:environment:
+      - 'Dev'
 compose:
   # Use the private IP address to connect to the host
   # (note: this does not modify inventory_hostname, which is set via I(hostnames))
