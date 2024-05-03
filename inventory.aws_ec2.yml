@@ -1,8 +1,10 @@
 ---
 plugin: amazon.aws.aws_ec2
+regions: 
+  - eu-west-3
 aws_access_key: ${AWS_ACCESS_KEY_ID}
 aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
-aws_region: eu-west-3
+aws_session_token: FwoGZXIvYXdzECkaDA3bPZkmUmaTI0cOGSKCAe7OpbClLl2aVQOVrgu1mH1GrDs2M733nJwZoUG/9KBrDJRSgudyvVNInJPzcFCBE2s1RnICdRPZWy7wCjW0zru7rbqojJVLYSjU1iO9ThShqhXRHubkT7S8RaYk/AWp+ganLDwv6gwzxPKWijhPcBICriDFJlOdp44ynqyNqvFzjZYo+LHSsQYyKLOnP0CanjlrK1tDlijQ4kf1mMYr/iUyLVQoPASpkO4rSrc3RyFebsw=
 keyed_groups:
   - key: tags
     prefix: tag
