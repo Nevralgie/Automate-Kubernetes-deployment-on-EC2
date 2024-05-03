@@ -15,10 +15,10 @@ regions:
 #   - tag:environment:
 #       - 'Dev'
 keyed_groups:
-  - prefix: Master
-    key: role
-  - prefix: Worker
-    key: role
+  - prefix: role
+    key: Master
+  - prefix: role
+    key: Worker
   
 
 compose:
