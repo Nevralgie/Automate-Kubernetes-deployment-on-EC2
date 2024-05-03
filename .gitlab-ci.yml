@@ -92,9 +92,6 @@ provision:
     # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - pwd
     # - pkill ssh-agent # Kill any running ssh-agent process running
-    - cat /home/gitlab-runner/.ssh/Pjpro_key
-    - cd /home/gitlab-runner/.ssh
-    - pwd 
     # - ssh-agent bash && ssh-add /home/gitlab-runner/.ssh/Pjpro_key
     # - sudo apt-get update && apt-get install ansible -y
     # - sudo apt-get install python3-boto3 awscli -y
