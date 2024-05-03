@@ -87,8 +87,8 @@ provision:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - ssh-agent bash 
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - apt-get update && apt-get install ansible -y
-    - apt-get install python3-boto3 awscli -y
+    # - sudo apt-get update && apt-get install ansible -y
+    # - sudo apt-get install python3-boto3 awscli -y
     # - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
     # - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.ini
     # - sed -i 's/^regions =.*/regions = eu-west-3/' ec2.ini
