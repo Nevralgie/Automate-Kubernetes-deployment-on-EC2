@@ -83,6 +83,11 @@ provision:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - apt-get update && apt-get install ansible -y
     - apt-get install python3-boto3 awscli -y
     # - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
