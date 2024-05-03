@@ -79,9 +79,10 @@ provision:
     # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - export ANSIBLE_CONFIG=ansible.cfg
     # - ssh-agent bash && ssh-add /home/gitlab-runner/.ssh/Pjpro_key
-    # - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     # - eval $(ssh-agent -s)
-    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "/home/gitlab-runner/.ssh/Pjpro_key"
+    - echo "/home/gitlab-runner/.ssh/Pjpro_key" | tr -d '\r' | ssh-add - > /dev/null
     # - echo "$SSH_PRIVATE_KEY"
     # - mkdir -p ~/.ssh
     # - chmod 700 ~/.ssh
