@@ -1,0 +1,63 @@
+---
+- hosts: master
+  become: yes
+  tasks:
+    - name: create an empty file for Kubeadm configuring
+      copy:
+        content: ""
+        dest: /etc/kubernetes/kubeadm-config.yaml
+        force: no
+
+    - name: configuring the container runtime including its cgroup driver
+      blockinfile:
+        path: /etc/kubernetes/kubeadm-config.yaml
+        block: |
+             kind: ClusterConfiguration
+             apiVersion: kubeadm.k8s.io/v1beta3
+             networking:
+               podSubnet: "10.244.0.0/16"
+             ---
+             kind: KubeletConfiguration
+             apiVersion: kubelet.config.k8s.io/v1beta1
+             runtimeRequestTimeout: "15m"
+             cgroupDriver: "systemd"
+             systemReserved:
+               cpu: 100m
+               memory: 350M
+             kubeReserved:
+               cpu: 100m
+               memory: 50M
+             enforceNodeAllocatable:
+             - pods
+
+    - name: Initialize the cluster
+      command: sudo kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
+      args:
+        chdir: /etc/kubernetes
+      become: yes
+    
+    - name: Create a directory
+      become: yes
+      file:
+        path: /home/azureuser/.kube
+        state: directory
+        mode: '0755'
+
+    - name: Copy admin.conf to .kube/config
+      shell: sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      environment:
+        HOME: /home/azureuser/
+
+    - name: Change ownership of .kube/config
+      shell: sudo chown azureuser:azureuser $HOME/.kube/config
+      environment:
+        HOME: /home/azureuser/
+        
+    - name: Download Calico manifest
+      get_url:
+        url: "https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml"
+        dest: "/tmp/calico.yaml"
+
+    - name: Apply Calico manifest
+      become_user: azureuser
+      command: kubectl apply -f /tmp/calico.yaml

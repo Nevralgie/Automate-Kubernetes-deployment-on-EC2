@@ -1,0 +1,28 @@
+---
+- hosts: master
+  become: yes
+  tasks:
+    - name: get join command
+      command: /usr/bin/kubeadm token create --print-join-command
+      register: join_command_raw
+    - debug: msg="{{ join_command_raw.stdout_lines[0] }}"
+
+    - name: set join command
+      set_fact:
+        join_command: "{{ join_command_raw.stdout_lines[0] }}"
+
+
+- hosts: workers
+  become: true
+  tasks:
+    - name: remove swap
+      command: /sbin/swapoff -a
+
+    - name: TCP port 6443 on master is reachable from worker
+      wait_for: 
+        host: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
+        port: 6443
+        timeout: 1
+
+    - name: join cluster
+      command: "{{ hostvars['master'].join_command }}"
