@@ -84,15 +84,15 @@ provision:
     # - echo "$SSH_PRIVATE_KEY"
     # - mkdir -p ~/.ssh
     # - chmod 700 ~/.ssh
-    - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
+    # - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
   script:
     # - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-
     # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - pwd
+    - pkill ssh-agent # Kill any running ssh-agent process running
     - cat /home/gitlab-runner/.ssh/Pjpro_key
     - ssh-agent bash 
-    - ssh-add 
+    - ssh-add /home/gitlab-runner/.ssh/Pjpro_key
     # - sudo apt-get update && apt-get install ansible -y
     # - sudo apt-get install python3-boto3 awscli -y
     # - wget https://raw.githubusercontent.com/vshn/ansible-dynamic-inventory-ec2/master/ec2.py
