@@ -1,6 +1,7 @@
 ---
 plugin: amazon.aws.aws_ec2
 profile: my_profile
+remote_user: ubuntu
 regions: 
   - eu-west-3
 keyed_groups:
