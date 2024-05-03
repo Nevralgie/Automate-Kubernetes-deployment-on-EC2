@@ -9,15 +9,15 @@
       copy:
         dest: "/etc/modules-load.d/k8s.conf"  # Destination file path
         content: |
-          br_netfilter  # Content of the file
+          br_netfilter 
 
     # Configure sysctl settings for Kubernetes
     - name: Configure sysctl settings
       copy:
         dest: "/etc/sysctl.d/k8s.conf"  # Destination file path
         content: |
-          net.bridge.bridge-nf-call-ip6tables = 1  # Enable IPv6 packet filtering for bridge
-          net.bridge.bridge-nf-call-iptables = 1   # Enable IPv4 packet filtering for bridge
+          net.bridge.bridge-nf-call-ip6tables = 1  
+          net.bridge.bridge-nf-call-iptables = 1   
 
     # Apply sysctl settings
     - name: Apply sysctl settings
