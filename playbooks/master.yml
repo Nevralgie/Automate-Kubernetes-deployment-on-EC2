@@ -1,5 +1,5 @@
 ---
-- hosts: master
+- hosts: tag_role_Master
   become: yes
   tasks:
     - name: create an empty file for Kubeadm configuring
@@ -39,17 +39,17 @@
     - name: Create a directory
       become: yes
       file:
-        path: /home/azureuser/.kube
+        path: /home/ubuntu/.kube
         state: directory
         mode: '0755'
 
     - name: Copy admin.conf to .kube/config
       shell: sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
       environment:
-        HOME: /home/azureuser/
+        HOME: /home/ubuntu/
 
     - name: Change ownership of .kube/config
-      shell: sudo chown azureuser:azureuser $HOME/.kube/config
+      shell: sudo chown ubuntu:ubuntu $HOME/.kube/config
       environment:
         HOME: /home/azureuser/
         
@@ -59,5 +59,4 @@
         dest: "/tmp/calico.yaml"
 
     - name: Apply Calico manifest
-      become_user: azureuser
       command: kubectl apply -f /tmp/calico.yaml
