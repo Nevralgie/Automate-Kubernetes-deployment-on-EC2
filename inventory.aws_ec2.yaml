@@ -1,7 +1,8 @@
 ---
 plugin: amazon.aws.aws_ec2
-# aws_access_key: ${AWS_ACCESS_KEY_ID}
-# aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
+aws_access_key: ''
+aws_secret_key: ''
+session_toke: ''
 profile: aws_profile
 remote_user: ubuntu
 regions: 
