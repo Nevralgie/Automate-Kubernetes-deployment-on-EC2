@@ -1,6 +1,6 @@
 ---
 - hosts: tag_role_Master
-  become: yes
+  become: true
   tasks:
     - name: create an empty file for Kubeadm configuring
       copy:
@@ -34,10 +34,8 @@
       command: sudo kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
       args:
         chdir: /etc/kubernetes
-      become: yes
     
     - name: Create a directory
-      become: yes
       file:
         path: /home/ubuntu/.kube
         state: directory
