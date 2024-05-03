@@ -71,9 +71,9 @@ provision:
   stage: provision
   image: python:3.9.17-slim-bullseye
   before_script:
-    # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-    # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    # - export AWS_REGION='eu-west-3'
+    - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - export AWS_REGION='eu-west-3'
     # - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - export ANSIBLE_CONFIG=ansible.cfg
