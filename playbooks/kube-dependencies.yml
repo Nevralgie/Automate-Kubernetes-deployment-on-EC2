@@ -10,14 +10,14 @@
         dest: /etc/hosts
         line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
         state: present
-    
+
     - name: Configure modules for Containerd by adding them to /etc/modules-load.d/containerd.conf
       copy:
         content: |
           overlay
           br_netfilter
         dest: /etc/modules-load.d/containerd.conf
-    
+
     - name: Load kernel modules
       modprobe:
         name: "{{ item }}"
@@ -25,17 +25,15 @@
         - overlay
         - br_netfilter
 
-
     # Configure sysctl settings for Kubernetes
     - name: Configure sysctl settings
       copy:
         dest: "/etc/sysctl.d/99-kubernetes-cri.conf"  # Destination file path
         content: |
           net.ipv4.ip_forward = 1
-          net.bridge.bridge-nf-call-ip6tables = 1  
+          net.bridge.bridge-nf-call-ip6tables = 1
           net.bridge.bridge-nf-call-iptables = 1
 
-    
     - name: Remove swap entry from /etc/fstab
       lineinfile:
         dest: /etc/fstab
@@ -44,7 +42,7 @@
 
     # Apply sysctl settings
     - name: Apply sysctl settings
-      command: sysctl --system  # Run sysctl to apply changes 
+      command: sysctl --system  # Run sysctl to apply changes
 
     # Update apt cache
     - name: Update apt cache
@@ -61,7 +59,7 @@
         - ca-certificates
         - curl
         - containerd.io
-    
+
     - name: Create directory for containerd configuration
       file:
         path: /etc/containerd
@@ -69,7 +67,7 @@
 
     - name: add Containerd configuration
       shell: /usr/bin/containerd config default > /etc/containerd/config.toml
-    
+
     - name: Enable systemd cgroup driver for containerd in the configuration file previously generated
       replace:
         path: /etc/containerd/config.toml
@@ -103,25 +101,13 @@
         dest: /etc/apt/sources.list.d/kubernetes.list
         content: |
           deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
-    
+
     - name: Help tools such as command-not-found to work correctly by giving permission
       file:
         path: "/etc/apt/sources.list.d/kubernetes.list"  # Directory path
         state: file  # Ensure file exists
         mode: '644'  # Set directory permissions
-      
-    # - name: Add Kubernetes repository to /etc/yum.repos.d/kubernetes.repo
-    #   copy:
-    #     content: |
-    #       [kubernetes]
-    #       name=Kubernetes
-    #       baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/deb/
-    #       enabled=1
-    #       gpgcheck=1
-    #       repo_gpgcheck=1
-    #       gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    #     dest: /etc/apt/sources.list.d/kubernetes.list
-    
+
     # Install Kubernetes components
     - name: Install Kubernetes components
       apt:
