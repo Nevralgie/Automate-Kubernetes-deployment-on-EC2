@@ -92,7 +92,7 @@
       apt_key:
         url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
         state: present
-        filename: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     
         # Add Kubernetes apt repository
     - name: Add Kubernetes apt repository
