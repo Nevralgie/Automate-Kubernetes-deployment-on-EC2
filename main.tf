@@ -166,7 +166,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 resource "aws_instance" "control_plane" {
   count         = var.control_plane_instance_number
   ami           = "ami-0326f9264af7e51e2"
-  instance_type = var.environment == "Prod" ? "t3.large" : "t2.micro"
+  instance_type = var.environment == "Prod" ? "t3.large" : "t2.medium"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
   vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
