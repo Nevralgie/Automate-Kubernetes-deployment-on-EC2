@@ -27,7 +27,8 @@ validate:
   artifacts:
     paths:
       - aws.cfg
-  when: on_success
+  when: manual
+        # on_success
 
 # plan:
 #   stage: plan

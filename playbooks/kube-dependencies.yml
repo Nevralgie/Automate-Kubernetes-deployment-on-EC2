@@ -58,7 +58,7 @@
         - apt-transport-https
         - ca-certificates
         - curl
-        - containerd.io
+        - containerd
 
     - name: Create directory for containerd configuration
       file:
