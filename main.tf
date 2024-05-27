@@ -170,7 +170,7 @@ resource "aws_instance" "control_plane" {
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
   vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
 
@@ -188,7 +188,7 @@ resource "aws_instance" "workers" {
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
   vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
 
