@@ -24,13 +24,13 @@
       command: sysctl --system  # Run sysctl to apply changes
     
         # Hold Kubernetes packages at current version using dpkg
-    - name: Verify Internet access
-      command: ping
-      args:
-        name: "{{ item }}"
-      loop:
-        - google.com
-        - 8.8.8.8
+    # - name: Verify Internet access
+    #   command: ping
+    #   args:
+    #     name: "{{ item }}"
+    #   loop:
+    #     - google.com
+    #     - 8.8.8.8
  
 
     # Update apt cache
