@@ -157,7 +157,6 @@
     - name: Hold package at current version
       apt:
         name: "{{ item }}"
-        state: hold
       loop:
         - kubelet
         - kubectl
