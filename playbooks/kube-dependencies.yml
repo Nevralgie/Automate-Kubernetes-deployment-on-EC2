@@ -88,25 +88,44 @@
         state: directory  # Ensure directory exists
         mode: '0755'  # Set directory permissions
 
-    # Download Kubernetes apt key and place it in keyring directory
-    - name: Download and add Kubernetes apt key
-      get_url:
-        url: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key"  # URL of Kubernetes apt key
-        dest: "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"  # Destination path
-      register: key_download  # Register the result for later use
+    # # Download Kubernetes apt key and place it in keyring directory
+    # - name: Download and add Kubernetes apt key
+    #   get_url:
+    #     url: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key"  # URL of Kubernetes apt key
+    #     dest: "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"  # Destination path
+    #   register: key_download  # Register the result for later use
 
-    # Add Kubernetes apt repository
-    - name: Add Kubernetes package repository
-      copy:
-        dest: /etc/apt/sources.list.d/kubernetes.list
-        content: |
-          deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+    # # Add Kubernetes apt repository
+    # - name: Add Kubernetes package repository
+    #   copy:
+    #     dest: /etc/apt/sources.list.d/kubernetes.list
+    #     content: |
+    #       deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
 
-    - name: Help tools such as command-not-found to work correctly by giving permission
-      file:
-        path: "/etc/apt/sources.list.d/kubernetes.list"  # Directory path
-        state: file  # Ensure file exists
-        mode: '644'  # Set directory permissions
+    # - name: Add Kubernetes repository to /etc/apt/sources.list.d/
+    #   copy:
+    #     content: |
+    #       [kubernetes]
+    #       name=Kubernetes
+    #       baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/deb/
+    #       enabled=1
+    #       gpgcheck=1
+    #       repo_gpgcheck=1
+    #       gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+    #     dest: /etc/apt/sources.list.d/kubernetes.list
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes.list
+        keyserver: keyserver.ubuntu.com
+        key: C52E9DF436A0D321
+
+    # - name: Help tools such as command-not-found to work correctly by giving permission
+    #   file:
+    #     path: "/etc/apt/sources.list.d/kubernetes.list"  # Directory path
+    #     state: file  # Ensure file exists
+    #     mode: '644'  # Set directory permissions
     
     # Update apt cache to enrich the list with added k8s packages
     - name: Update apt cache
