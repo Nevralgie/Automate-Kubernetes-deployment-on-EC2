@@ -90,7 +90,7 @@
     
     - name: Add Kubernetes apt repository signing key
       apt_key:
-        url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
         state: present
         keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     
@@ -99,7 +99,7 @@
       copy:
         dest: /etc/apt/sources.list.d/kubernetes.list
         content: |
-          deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /
+          deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
 
     # # Download Kubernetes apt key and place it in keyring directory
     # - name: Download and add Kubernetes apt key
