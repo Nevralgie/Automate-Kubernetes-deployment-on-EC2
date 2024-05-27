@@ -7,7 +7,7 @@ variable "environment" {
 variable "control_plane_instance_number" {
   description = "How many controlplane ?"
   type = number
-  default = 2
+  default = 1
 }
 
 variable "worker_instance_number" {

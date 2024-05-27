@@ -22,6 +22,11 @@
     # Apply sysctl settings
     - name: Apply sysctl settings
       command: sysctl --system  # Run sysctl to apply changes
+        - name: Hold Kubernetes packages at current version
+      command: ping
+      loop:
+        - 8.8.8.8
+        - google.com
 
     # Update apt cache
     - name: Update apt cache
