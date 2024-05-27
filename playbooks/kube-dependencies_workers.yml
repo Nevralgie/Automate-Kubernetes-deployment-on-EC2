@@ -151,9 +151,8 @@
         name: "{{ item }}"  # Package name
         state: present  # Ensure package is present
       loop:
-        - kubelet=1.29.0-1.1
-        - kubeadm=1.29.0-1.1
-        - kubectl=1.29.0-1.1
+        - kubelet=1.29.5-1.1
+        - kubectl=1.29.5-1.1
 
     - name: Hold package at current version
       apt:
