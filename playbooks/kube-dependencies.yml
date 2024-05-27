@@ -119,7 +119,7 @@
         - kubectl=1.29.0-1.1
 
     - name: Hold package at current version
-      apt_package:
+      apt:
         name: "{{ item }}"
         state: hold
       loop:
