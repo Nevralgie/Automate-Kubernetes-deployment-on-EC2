@@ -107,6 +107,11 @@
         path: "/etc/apt/sources.list.d/kubernetes.list"  # Directory path
         state: file  # Ensure file exists
         mode: '644'  # Set directory permissions
+    
+    # Update apt cache to enrich the list with added k8s packages
+    - name: Update apt cache
+      apt:
+        update_cache: yes
 
     # Install Kubernetes components
     - name: Install Kubernetes components
