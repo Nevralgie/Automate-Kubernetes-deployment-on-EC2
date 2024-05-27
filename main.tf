@@ -26,9 +26,9 @@ provider "aws" {
 }
 
 
-# data "aws_vpc" "target_peering_vpc" {
-#   id = "vpc-0f4d614772ca8d3f0"
-# }
+data "aws_vpc" "target_peering_vpc" {
+  id = "vpc-0f4d614772ca8d3f0"
+}
 resource "aws_vpc" "main_vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support = true
@@ -199,23 +199,23 @@ resource "aws_instance" "workers" {
   }
 }
 
-# resource "aws_vpc_peering_connection" "vpc_gitlab_runner" {
-#   peer_vpc_id   = data.aws_vpc.target_peering_vpc.id
-#   vpc_id        = aws_vpc.main_vpc.id
+resource "aws_vpc_peering_connection" "vpc_gitlab_runner" {
+  peer_vpc_id   = data.aws_vpc.target_peering_vpc.id
+  vpc_id        = aws_vpc.main_vpc.id
 
-#   tags = {
-#     Side = "Requester"
-#   }
-# }
+  tags = {
+    Side = "Requester"
+  }
+}
 
-# resource "aws_vpc_peering_connection_accepter" "peer" {
-#   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
-#   auto_accept               = true
+resource "aws_vpc_peering_connection_accepter" "peer" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
+  auto_accept               = true
 
-#   tags = {
-#     Side = "Accepter"
-#   }
-# }
+  tags = {
+    Side = "Accepter"
+  }
+}
 
 # Outputs for RDS instance
 # output "database_endpoint" {
@@ -252,24 +252,24 @@ output "private_ip" {
 }
 
 # Create a route for the second VPC's CIDR block in the first VPC's route table
-# resource "aws_route" "main_vpc_route_to_k8s" {
-#   route_table_id            = "rtb-0cb9914b16f6618ed"
-#   destination_cidr_block    = "10.0.0.0/16" # Replace with the other VPC's CIDR block
-#   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
-# }
+resource "aws_route" "main_vpc_route_to_k8s" {
+  route_table_id            = "rtb-0cb9914b16f6618ed"
+  destination_cidr_block    = "10.0.0.0/16" # Replace with the other VPC's CIDR block
+  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
+}
 
 
 
-# # Create a route for the first VPC's CIDR block in the second VPC's route table
-# resource "aws_route" "vpc2_route" {
-#   route_table_id            = aws_vpc.main_vpc.main_route_table_id
-#   destination_cidr_block    = "172.31.0.0/16"
-#   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
-# }
+# Create a route for the first VPC's CIDR block in the second VPC's route table
+resource "aws_route" "vpc2_route" {
+  route_table_id            = aws_vpc.main_vpc.main_route_table_id
+  destination_cidr_block    = "172.31.0.0/16"
+  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
+}
 
 # Associate the route tables with the subnets in the VPCs
 # Replace the subnet IDs with the actual IDs of the subnets in the VPCs
 
-# data "aws_subnet" "gitlab_runner_sub" {
-#   id = "subnet-0eea324505858e7f7"
-# }
+data "aws_subnet" "gitlab_runner_sub" {
+  id = "subnet-0eea324505858e7f7"
+}
