@@ -1,6 +1,6 @@
 ---
 - name: Configure Kubernetes prerequisites
-  hosts: all  # Target all hosts defined in your Ansible inventory
+  hosts: tag_role_Master  # Target all hosts defined in your Ansible inventory
   become: true  # Run tasks with sudo privileges
 
   tasks:
@@ -161,5 +161,4 @@
         state: hold
       loop:
         - kubelet
-        - kubeadm
         - kubectl
