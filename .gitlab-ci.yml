@@ -23,8 +23,8 @@ build-docker-image:
     - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1 ./app
     - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1
   artifacts:
-  paths:
-    - ~/.docker/config.json
+    paths:
+      - ~/.docker/config.json
   tags:
     - build_job_docker
 
@@ -138,7 +138,8 @@ provision:
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml
   when: manual
-   needs:
+  needs:
+    - apply
     - job: build-docker-image
       artifacts: true
 
