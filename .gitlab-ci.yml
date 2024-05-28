@@ -11,7 +11,7 @@ stages:
 
 build-docker-image:
   stage: build
-  image: docker:latest
+  image: docker:24.0.5
   services:
     - docker:dind
   variables:
