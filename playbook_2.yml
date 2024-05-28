@@ -16,13 +16,11 @@
 
     - debug:
         var: config_json_files.stdout_lines
-    - name: Change permissions of config.json
-      file:
-        path: "/home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/config.json"
-        owner: root
-        group: root
-        mode: "0644"  # Adjust permissions as needed
-
+    
+    # - name: Copy config.json to remote system
+    #   copy:
+    #     src: /home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/config.json
+    #     dest: /path/on/remote/system/config.json
 
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
