@@ -4,7 +4,7 @@
     state: present
     kubeconfig: /home/ubuntu/.kube/config
     definition:
-      apiVersion: v1
+      apiVersion: apps/v1
       kind: Deployment
       metadata:
         name: app-container
@@ -24,8 +24,8 @@
                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
                 ports:
                   - containerPort: 80
-          imagePullSecrets: 
-            - name: gitlab-cred
+            imagePullSecrets: 
+              - name: gitlab-cred
 
 - name : Expose the deployment
   become_user: ubuntu
