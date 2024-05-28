@@ -42,12 +42,12 @@
         mode: '0755'
 
     - name: Copy admin.conf to .kube/config
-      shell: sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      shell: cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
       environment:
         HOME: /home/ubuntu/
 
     - name: Change ownership of .kube/config
-      shell: sudo chown ubuntu:ubuntu $HOME/.kube/config
+      shell: chown ubuntu:ubuntu $HOME/.kube/config
       environment:
         HOME: /home/ubuntu/
         
