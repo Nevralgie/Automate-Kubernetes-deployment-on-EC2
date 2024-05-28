@@ -24,7 +24,7 @@ build-docker-image:
     - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1
   artifacts:
     paths:
-      - ~/.docker/config.json
+      - $CI_PROJECT_DIR/.docker/config.json
   tags:
     - build_job_docker
 
