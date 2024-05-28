@@ -4,9 +4,26 @@ variables:
 stages:
   - validate
   # - plan
+  - build
   - apply
   - provision
   - destroy
+
+build-docker-image:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "" # Vide pour l'instant pour établie la connection entre les conteneurs
+  before_script:
+    - echo "$Pull_registry_token" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin # Connection au registry gitlab
+  script:
+    - docker build ./app -t glregistry.boost.open.global/enedis/enedispo/app_temoin:v0.1 .
+    - docker push glregistry.boost.open.global/enedis/enedispo/app_temoin:v0.1
+  tags:
+    - build_job_docker
 
 validate:
   stage: validate
