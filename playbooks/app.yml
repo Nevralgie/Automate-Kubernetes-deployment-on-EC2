@@ -20,7 +20,7 @@
               app: demo-app
           spec:
             containers:
-              - name: dum_app_container
+              - name: dum-app-container
                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
                 ports:
                   - containerPort: 80
