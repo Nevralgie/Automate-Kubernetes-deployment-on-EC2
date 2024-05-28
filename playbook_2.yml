@@ -1,24 +1,6 @@
 - hosts: tag_role_Master
   become: true
   tasks:
-    - name: Debug Execution Environment
-      debug:
-        msg: "Working directory: {{ ansible_env.PWD }}"
-    
-    - name: Check current user
-      shell: whoami
-      register: current_user
-    
-    - debug:
-        var: current_user.stdout
-
-    - name: Find config.json file
-      shell: find / -name "config.json" 2>/dev/null
-      register: config_json_files
-
-    - debug:
-        var: config_json_files.stdout_lines
-    
     - name: Copy config.json to remote system
       copy:
         src: "{{ playbook_dir }}/.docker/config.json"
