@@ -7,7 +7,7 @@
       apiVersion: v1
       kind: Deployment
       metadata:
-        name: app_container
+        name: app-container
         namespace: default
       spec:
         replicas: 4
@@ -25,7 +25,7 @@
               ports:
                 - containerPort: 80
         imagePullSecrets: 
-        - name: gitlab_cred
+        - name: gitlab-cred
 
 - name : Expose the deployment
   become_user: ubuntu
