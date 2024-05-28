@@ -1,4 +1,5 @@
 - hosts: tag_role_Master
+  become: true
   tasks:
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
