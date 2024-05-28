@@ -163,7 +163,7 @@ deploy_app:
     - cp .docker/config.json $CI_PROJECT_DIR
     - ls
     - find -name config.json
-    - chmod +r config.json
+    - chmod +rw config.json
     - ansible --version
     - ansible -m ping all
     - ansible-inventory --list
