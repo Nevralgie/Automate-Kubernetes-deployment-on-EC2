@@ -139,7 +139,6 @@ provision:
     - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml
   when: manual
    needs:
-    - apply
     - job: build-docker-image
       artifacts: true
 
