@@ -2,6 +2,7 @@
   become: true
   tasks:    
     - name: Create deployment pulling private image
+      kubeconfig: /home/ubuntu/.kube/config
       kubernetes.core.k8s:
         state: present
         definition:
