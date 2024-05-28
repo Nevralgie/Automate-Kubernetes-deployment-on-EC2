@@ -18,6 +18,7 @@ build-docker-image:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "" # Vide pour l'instant pour établie la connection entre les conteneurs
   before_script:
+    - mkdir /root/
     - echo "$PULL_PAT_TEST" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin # Connection au registry gitlab
   script:
     - find -name config.json
