@@ -29,11 +29,11 @@
 
 - name : Expose the deployment
   become_user: ubuntu
-  shell : kubectl expose deployment/app_container --type="LoadBalancer" --port=80 --target-port=80
+  shell : kubectl expose deployment/app-container --type="LoadBalancer" --port=80 --target-port=80
 
 - name: Get the service exposed port
   become_user: ubuntu
-  shell: kubectl get services/app_container
+  shell: kubectl get services/app-container
   register: load_balancer_output
 
 - name: display NodePort exposed port value 
