@@ -10,7 +10,7 @@ stages:
   - destroy
 
 build-docker-image:
-  stage: deploy
+  stage: build
   image: docker:latest
   services:
     - docker:dind
