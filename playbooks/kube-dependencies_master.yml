@@ -2,6 +2,8 @@
 - name: Configure Kubernetes prerequisites
   hosts: tag_role_Master  # Target all hosts defined in your Ansible inventory
   become: true  # Run tasks with sudo privileges
+  variables: 
+    - ansible_hostname: controlplane
 
   tasks:
 
@@ -9,6 +11,7 @@
       lineinfile:
         dest: /etc/hosts
         line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
+        # line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
         state: present
 
     - name: Configure modules for Containerd by adding them to /etc/modules-load.d/containerd.conf
