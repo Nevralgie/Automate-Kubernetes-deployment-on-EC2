@@ -1,0 +1,2 @@
+- import_playbook: ./playbooks/registry_secret.yml
+- import_playbook: ./playbooks/app.yml
