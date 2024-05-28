@@ -1,43 +1,41 @@
-- hosts: tag_role_Master
-  become: true
-  tasks:    
-    - name: Create deployment pulling private image
-      kubeconfig: /home/ubuntu/.kube/config
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Deployment
+  
+- name: Create deployment pulling private image
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: v1
+      kind: Deployment
+      metadata:
+        name: app_container
+        namespace: default
+      spec:
+        replicas: 4
+        selector:
+          matchLabels:
+            app: demo-app
+        template:
           metadata:
-            name: app_container
-            namespace: default
-          spec:
-            replicas: 4
-            selector:
-              matchLabels:
-                app: demo-app
-            template:
-              metadata:
-                labels:
-                  app: demo-app
-            spec:
-              containers:
-                - name: dum_app_container
-                  image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
-                  ports:
-                    - containerPort: 80
-            imagePullSecrets: 
-            - name: gitlab_cred
-    
-    - name : Expose the deployment
-      become_user: ubuntu
-      shell : kubectl expose deployment/app_container --type="LoadBalancer" --port=80 --target-port=80
-    
-    - name: Get the service exposed port
-      become_user: ubuntu
-      shell: kubectl get services/app_container
-      register: load_balancer_output
-    
-    - name: display NodePort exposed port value 
-      debug:
-        var: load_balancer_output.stdout
+            labels:
+              app: demo-app
+        spec:
+          containers:
+            - name: dum_app_container
+              image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
+              ports:
+                - containerPort: 80
+        imagePullSecrets: 
+        - name: gitlab_cred
+
+- name : Expose the deployment
+  become_user: ubuntu
+  shell : kubectl expose deployment/app_container --type="LoadBalancer" --port=80 --target-port=80
+
+- name: Get the service exposed port
+  become_user: ubuntu
+  shell: kubectl get services/app_container
+  register: load_balancer_output
+
+- name: display NodePort exposed port value 
+  debug:
+    var: load_balancer_output.stdout

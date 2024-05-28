@@ -4,9 +4,11 @@
     - name: Debug Execution Environment
       debug:
         msg: "Working directory: {{ ansible_env.PWD }}"
+    
     - name: Check current user
       shell: whoami
       register: current_user
+    
     - debug:
         var: current_user.stdout
 
@@ -29,4 +31,8 @@
         key_path: "/home/ubuntu/config.json"
 
 # - import_playbook: ./playbooks/registry_secret.yml
-- import_playbook: ./playbooks/app.yml
+- hosts: tag_role_Master
+  become: true
+  tasks:
+    - name: Include subdirectory playbook
+      include_tasks: playbooks/app.yml
