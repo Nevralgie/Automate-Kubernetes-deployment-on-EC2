@@ -160,7 +160,7 @@ deploy_app:
     - cat ~/.aws/credentials
     - cat ~/.aws/config
     - aws sts get-caller-identity
-    - cp /.docker/config.json $CI_PROJECT_DI
+    - cp /.docker/config.json $CI_PROJECT_DIR
     - ls
     - find -name 
     - ansible --version
