@@ -1,6 +1,9 @@
 - hosts: tag_role_Master
   become: true
   tasks:
+    - name: Debug Execution Environment
+      debug:
+        msg: "Working directory: {{ ansible_env.PWD }}"
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
       vars:
