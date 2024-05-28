@@ -1,5 +1,5 @@
 variables:
-  DOCKER_CONFIG: "/root/.docker"
+  DOCKER_CONFIG: "$CI_PROJECT_DIR/.docker"
 
 stages:
   - validate
@@ -22,12 +22,13 @@ build-docker-image:
     - echo "$PULL_PAT_TEST" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin # Connection au registry gitlab
     - find -name config.json
   script:
-    - find -name config.json
+    - echo "Listing contents of Docker config directory:"
+    - ls -la $DOCKER_CONFIG
     # - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1 ./app
     # - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1
   artifacts:
     paths:
-      - $CI_PROJECT_DIR/root/.docker/config.json
+      - .docker/config.json
   tags:
     - build_job_docker
   # when: manual
