@@ -120,7 +120,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   to_port           = 80
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+resource "aws_vpc_security_group_ingress_rule" "allow_kube_api" {
   security_group_id = aws_security_group.allow_ssh_http.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 6443
