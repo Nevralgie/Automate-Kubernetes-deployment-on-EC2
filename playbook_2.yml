@@ -8,14 +8,14 @@
       shell: whoami
       register: current_user
     - debug:
-      var: current_user.stdout
+        var: current_user.stdout
 
     - name: Find config.json file
       shell: find / -name "config.json" 2>/dev/null
       register: config_json_files
 
     - debug:
-      var: config_json_files.stdout_lines
+        var: config_json_files.stdout_lines
 
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
