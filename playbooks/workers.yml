@@ -25,6 +25,7 @@
     #     timeout: 1
 
     - name: join cluster
-      command: "{{ hostvars['tag_role_Master'].join_command }}"
+      command: "{{ join_command }}"
+      # command: "{{ hostvars['tag_role_Master'].join_command }}"
       environment:
         HOME: /home/ubuntu/
