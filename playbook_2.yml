@@ -4,7 +4,7 @@
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
       vars:
-        key_path: "{{ playbook_dir }}/config.json"
+        key_path: "{{ playbook_dir }}/.docker/config.json"
 
 # - import_playbook: ./playbooks/registry_secret.yml
 - import_playbook: ./playbooks/app.yml
