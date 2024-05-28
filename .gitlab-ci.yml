@@ -29,7 +29,7 @@ build-docker-image:
       - .docker/config.json
   tags:
     - build_job_docker
-  when: manual
+  # when: manual
 
 validate:
   stage: validate
@@ -162,13 +162,13 @@ deploy_app:
     - aws sts get-caller-identity
     - cp .docker/config.json $CI_PROJECT_DIR
     - ls
-    - find -name 
+    - find -name config.json
     - ansible --version
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook_2.yml
-  when: manual
+  # when: manual
   needs:
     # - provision
     - job: build-docker-image

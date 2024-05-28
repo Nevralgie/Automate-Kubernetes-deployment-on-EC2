@@ -1,9 +1,7 @@
 - hosts: tag_role_Master
   become: true
-  vars: 
-    - key_path: "./config.json"
   tasks:    
-    - name: Create Kubernetes secret
+    - name: Create deployment pulling private image
       kubernetes.core.k8s:
         state: present
         definition:
