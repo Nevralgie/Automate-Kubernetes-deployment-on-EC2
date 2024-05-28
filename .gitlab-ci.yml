@@ -20,8 +20,8 @@ build-docker-image:
   before_script:
     - echo "$PULL_PAT_TEST" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin # Connection au registry gitlab
   script:
-    - docker build -t CI_REGISTRY/ara/terraform-test/app_temoin:v0.1 ./app
-    - docker push CI_REGISTRY/ara/terraform-test/app_temoin:v0.1
+    - docker build -t $CI_REGISTRY/ara/terraform-test/app_temoin:v0.1 ./app
+    - docker push $CI_REGISTRY/ara/terraform-test/app_temoin:v0.1
   tags:
     - build_job_docker
 
