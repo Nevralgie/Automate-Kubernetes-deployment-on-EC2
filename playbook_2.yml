@@ -16,11 +16,18 @@
 
     - debug:
         var: config_json_files.stdout_lines
+    - name: Change permissions of config.json
+      file:
+        path: "/home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/config.json"
+        owner: root
+        group: root
+        mode: "0644"  # Adjust permissions as needed
+
 
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
       vars:
-        key_path: "/home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/config.json"
+        key_path: "/home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/playbooks/config.json"
 
 # - import_playbook: ./playbooks/registry_secret.yml
 - import_playbook: ./playbooks/app.yml
