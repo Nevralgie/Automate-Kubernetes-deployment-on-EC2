@@ -19,8 +19,9 @@
     
     - name: Copy config.json to remote system
       copy:
-        src: /home/gitlab-runner/builds/f1XNY-4g8/0/ara1504621/terraform-test/.docker/config.json
+        src: "{{ playbook_dir }}/.docker/config.json"
         dest: /home/ubuntu/config.json
+        mode: '0644'
 
     - name: Include subdirectory playbook
       include_tasks: playbooks/registry_secret.yml
