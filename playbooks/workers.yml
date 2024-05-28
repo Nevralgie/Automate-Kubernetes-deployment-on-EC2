@@ -23,9 +23,11 @@
     #     host: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
     #     port: 6443
     #     timeout: 1
+    - name: fetch join command from master
+      set_fact:
+        join_command: "{{ hostvars[groups['tag_role_Master'][0]].join_command }}"
 
     - name: join cluster
       command: "{{ join_command }}"
-      # command: "{{ hostvars['tag_role_Master'].join_command }}"
       environment:
         HOME: /home/ubuntu/
