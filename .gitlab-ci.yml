@@ -156,14 +156,6 @@ deploy_app:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
   script:
-    - pwd
-    - cat ~/.aws/credentials
-    - cat ~/.aws/config
-    - aws sts get-caller-identity
-    - cp .docker/config.json $CI_PROJECT_DIR
-    - cat config.json
-    - ls
-    - find -name config.json
     - ansible --version
     - ansible -m ping all
     - ansible-inventory --list

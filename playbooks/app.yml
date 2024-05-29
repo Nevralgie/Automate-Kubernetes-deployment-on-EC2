@@ -24,18 +24,19 @@
                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
                 ports:
                   - containerPort: 80
+                    target_port: 80 
             imagePullSecrets: 
               - name: gitlab-cred
 
 - name : Expose the deployment
   become_user: ubuntu
-  shell : kubectl expose deployment/app-container --type="LoadBalancer" --port=80 --target-port=80
+  shell : kubectl expose deployment/app-container --type="NodePort" --port=80 --target-port=80
 
 - name: Get the service exposed port
   become_user: ubuntu
   shell: kubectl get services/app-container
-  register: load_balancer_output
+  register: node_port_output
 
 - name: display NodePort exposed port value 
   debug:
-    var: load_balancer_output.stdout
+    var: node_port_output.stdout
