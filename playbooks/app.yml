@@ -1,50 +1,3 @@
-# - name: Create deployment pulling private image
-#   kubernetes.core.k8s:
-#     state: present
-#     kubeconfig: /home/ubuntu/.kube/config
-#     definition:
-#       apiVersion: apps/v1
-#       kind: Deployment
-#       metadata:
-#         name: app-container
-#         namespace: default
-#       spec:
-#         replicas: 4
-#         selector:
-#           matchLabels:
-#             app: demo-app
-#         template:
-#           metadata:
-#             labels:
-#               app: demo-app
-#           spec:
-#             containers:
-#               - name: dum-app-container
-#                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
-#                 ports:
-#                   - containerPort: 5000
-#             imagePullSecrets: 
-#               - name: gitlab-cred
-
-# - name: Expose deployment using NodePort
-#   kubernetes.core.k8s:
-#     state: present
-#     kubeconfig: /home/ubuntu/.kube/config
-#     definition:
-#       apiVersion: v1
-#       kind: Service
-#       metadata:
-#         name: app-nodeport-service
-#         namespace: default
-#       spec:
-#         type: NodePort
-#         selector:
-#           app: demo-app
-#         ports:
-#           - protocol: TCP
-#             port: 80 # The port on which the service will be exposed
-#             targetPort: 5000 # The port your application is listening on
-#             nodePort: 31000  # NodePort range is 30000-32767
 ---
 - name: Setup Kubernetes cluster with Helm and Ingress controller
   tasks:
@@ -141,3 +94,52 @@
                           name: app-clusterip-service
                           port:
                             number: 80  # This should match the port on the service
+
+
+# - name: Create deployment pulling private image
+#   kubernetes.core.k8s:
+#     state: present
+#     kubeconfig: /home/ubuntu/.kube/config
+#     definition:
+#       apiVersion: apps/v1
+#       kind: Deployment
+#       metadata:
+#         name: app-container
+#         namespace: default
+#       spec:
+#         replicas: 4
+#         selector:
+#           matchLabels:
+#             app: demo-app
+#         template:
+#           metadata:
+#             labels:
+#               app: demo-app
+#           spec:
+#             containers:
+#               - name: dum-app-container
+#                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
+#                 ports:
+#                   - containerPort: 5000
+#             imagePullSecrets: 
+#               - name: gitlab-cred
+
+# - name: Expose deployment using NodePort
+#   kubernetes.core.k8s:
+#     state: present
+#     kubeconfig: /home/ubuntu/.kube/config
+#     definition:
+#       apiVersion: v1
+#       kind: Service
+#       metadata:
+#         name: app-nodeport-service
+#         namespace: default
+#       spec:
+#         type: NodePort
+#         selector:
+#           app: demo-app
+#         ports:
+#           - protocol: TCP
+#             port: 80 # The port on which the service will be exposed
+#             targetPort: 5000 # The port your application is listening on
+#             nodePort: 31000  # NodePort range is 30000-32767
