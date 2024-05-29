@@ -14,13 +14,19 @@
 - name: Add nginx-ingress Helm repo
   ansible.builtin.command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
   register: helm_repo_result
+  environment:
+        HOME: /home/ubuntu/
 
 - name: Update Helm repos
   ansible.builtin.command: helm repo update
   when: helm_repo_result.changed
+  environment:
+        HOME: /home/ubuntu/
 
 - name: Install nginx-ingress controller
   ansible.builtin.command: helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default
+  environment:
+        HOME: /home/ubuntu/
 
 - name: Create deployment pulling private image
   kubernetes.core.k8s:
