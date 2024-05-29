@@ -97,43 +97,87 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
-resource "aws_security_group" "allow_ssh_http" {
-  name        = "allow_ssh_http"
-  description = "Allow SSH and HTTP inbound traffic"
+resource "aws_security_group" "kubernetes_controlplane" {
+  name        = "ctlplane_sg"
+  description = "Allow SSH and necessary ports for k8s cluster - ctlplane"
   vpc_id      = aws_vpc.main_vpc.id 
 }
 
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
-  security_group_id = aws_security_group.allow_ssh_http.id
+  security_group_id = aws_security_group.kubernetes_controlplane.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
-  security_group_id = aws_security_group.allow_ssh_http.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  ip_protocol       = "tcp"
-  to_port           = 80
-}
-
 resource "aws_vpc_security_group_ingress_rule" "allow_kube_api" {
-  security_group_id = aws_security_group.allow_ssh_http.id
-  referenced_security_group_id = aws_security_group.allow_ssh_http.id
+  security_group_id = aws_security_group.kubernetes_controlplane.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
   from_port         = 6443
   ip_protocol       = "tcp"
   to_port           = 6443
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_etcd_server_client_api" {
+  security_group_id = aws_security_group.kubernetes_controlplane.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 2379
+  ip_protocol       = "tcp"
+  to_port           = 2380
+}
+
+resource "aws_vpc_security_group_ingress_rule" "kubelet_scheduler_kubelet_k_controller" {
+  security_group_id = aws_security_group.kubernetes_controlplane.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 10250
+  ip_protocol       = "tcp"
+  to_port           = 10259
+}
+
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
-  security_group_id = aws_security_group.allow_ssh_http.id
+  security_group_id = aws_security_group.kubernetes_controlplane.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
+resource "aws_security_group" "kubernetes_workers" {
+  name        = "workers_sg"
+  description = "Allow SSH and necessary ports for k8s cluster - workers"
+  vpc_id      = aws_vpc.main_vpc.id 
+}
+
+resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 10250
+  ip_protocol       = "tcp"
+  to_port           = 10250
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
+  from_port         = 30000
+  ip_protocol       = "tcp"
+  to_port           = 32767
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_out" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
 
 # resource "aws_security_group" "rds_security_group" {
 #   name        = "rds_security_group"
@@ -143,7 +187,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 
 # resource "aws_vpc_security_group_ingress_rule" "allow_mysql" {
 #   security_group_id = aws_security_group.rds_security_group.id
-#   referenced_security_group_id = aws_security_group.allow_ssh_http.id
+#   referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
 #   from_port         = 3306
 #   ip_protocol       = "tcp"
 #   to_port           = 3306
@@ -177,7 +221,7 @@ resource "aws_instance" "control_plane" {
   instance_type = var.environment == "Prod" ? "t3.large" : "t2.medium"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
-  vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
+  vpc_security_group_ids      = [aws_security_group.kubernetes_workers.id]
   associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
@@ -195,7 +239,7 @@ resource "aws_instance" "workers" {
   instance_type = var.environment == "Prod" ? "t3.large" : "t2.micro"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
-  vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
+  vpc_security_group_ids      = [aws_security_group.kubernetes_controlplane.id]
   associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
