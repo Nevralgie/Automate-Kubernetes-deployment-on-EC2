@@ -28,15 +28,36 @@
             imagePullSecrets: 
               - name: gitlab-cred
 
-- name : Expose the deployment
-  become_user: ubuntu
-  shell : kubectl expose deployment/app-container --type="NodePort" --port=80 --target-port=80
+- name: Expose deployment using NodePort
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: app-nodeport-service
+        namespace: default
+      spec:
+        type: NodePort
+        selector:
+          app: demo-app
+        ports:
+          - protocol: TCP
+            port: 80
+            targetPort: 80
+            nodePort: 31000  # NodePort range is 30000-32767
 
-- name: Get the service exposed port
-  become_user: ubuntu
-  shell: kubectl get services/app-container
-  register: node_port_output
 
-- name: display NodePort exposed port value 
-  debug:
-    var: node_port_output.stdout
+# - name : Expose the deployment
+#   become_user: ubuntu
+#   shell : kubectl expose deployment/app-container --type="NodePort" --port=80 --target-port=80
+
+# - name: Get the service exposed port
+#   become_user: ubuntu
+#   shell: kubectl get services/app-container
+#   register: node_port_output
+
+# - name: display NodePort exposed port value 
+#   debug:
+#     var: node_port_output.stdout
