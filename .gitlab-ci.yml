@@ -161,7 +161,7 @@ deploy_app:
     - ansible-inventory --list
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook_2.yml
-  # when: manual
+  when: manual
   needs:
     # - provision
     - job: build-docker-image
@@ -176,6 +176,6 @@ destroy:
     - terraform init
   script:
     - terraform destroy --auto-approve
-  dependencies:
+  needs:
     - apply
   when: manual
