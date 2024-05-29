@@ -24,7 +24,6 @@
                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
                 ports:
                   - containerPort: 80
-                    target_port: 80 
             imagePullSecrets: 
               - name: gitlab-cred
 
