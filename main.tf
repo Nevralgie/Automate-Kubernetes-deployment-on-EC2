@@ -59,6 +59,8 @@ resource "aws_subnet" "sub_1_ec2_lb" {
   availability_zone = "eu-west-3a"
   tags = {
     Name = "main_subnet"
+    kubernetes.io/role/elb = 1
+    kubernetes.io/cluster/cluster-demo = owned
   }
 }
 
@@ -68,6 +70,8 @@ resource "aws_subnet" "sub_2_ec2_lb" {
   availability_zone = "eu-west-3c"
   tags = {
     Name = "lb_subnet"
+    kubernetes.io/role/elb = 1
+    kubernetes.io/cluster/cluster-demo= owned
   }
 }
 
