@@ -56,49 +56,49 @@
             imagePullSecrets:
               - name: gitlab-cred
 
-- name: Expose deployment using ClusterIP
-  kubernetes.core.k8s:
-    state: present
-    kubeconfig: /home/ubuntu/.kube/config
-    definition:
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: app-clusterip-service
-        namespace: default
-      spec:
-        type: ClusterIP
-        selector:
-          app: demo-app
-        ports:
-          - protocol: TCP
-            port: 80  # The port on which the service will be exposed
-            targetPort: 5000  # The port your application is listening on
+# - name: Expose deployment using ClusterIP
+#   kubernetes.core.k8s:
+#     state: present
+#     kubeconfig: /home/ubuntu/.kube/config
+#     definition:
+#       apiVersion: v1
+#       kind: Service
+#       metadata:
+#         name: app-clusterip-service
+#         namespace: default
+#       spec:
+#         type: ClusterIP
+#         selector:
+#           app: demo-app
+#         ports:
+#           - protocol: TCP
+#             port: 80  # The port on which the service will be exposed
+#             targetPort: 5000  # The port your application is listening on
 
-- name: Create Ingress resource
-  kubernetes.core.k8s:
-    state: present
-    kubeconfig: /home/ubuntu/.kube/config
-    definition:
-      apiVersion: networking.k8s.io/v1
-      kind: Ingress
-      metadata:
-        name: app-ingress
-        namespace: default
-        annotations:
-          nginx.ingress.kubernetes.io/rewrite-target: /
-      spec:
-        rules:
-          - host: your-app.example.com
-            http:
-              paths:
-                - path: /
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: app-clusterip-service
-                      port:
-                        number: 80  # This should match the port on the service
+# - name: Create Ingress resource
+#   kubernetes.core.k8s:
+#     state: present
+#     kubeconfig: /home/ubuntu/.kube/config
+#     definition:
+#       apiVersion: networking.k8s.io/v1
+#       kind: Ingress
+#       metadata:
+#         name: app-ingress
+#         namespace: default
+#         annotations:
+#           nginx.ingress.kubernetes.io/rewrite-target: /
+#       spec:
+#         rules:
+#           - host: your-app.example.com
+#             http:
+#               paths:
+#                 - path: /
+#                   pathType: Prefix
+#                   backend:
+#                     service:
+#                       name: app-clusterip-service
+#                       port:
+#                         number: 80  # This should match the port on the service
 
 
 # - name: Create deployment pulling private image
