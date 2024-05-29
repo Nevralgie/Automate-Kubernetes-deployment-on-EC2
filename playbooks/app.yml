@@ -1,5 +1,6 @@
 ---
 - name: Setup Kubernetes cluster with Helm and Ingress controller
+  hosts: tag_role_Master
   tasks:
     - name: Download Helm installation script
       ansible.builtin.get_url:
