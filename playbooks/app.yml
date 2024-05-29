@@ -1,98 +1,98 @@
 ---
 
 - name: Download Helm installation script
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-    dest: /tmp/get_helm.sh
-    mode: '0700'
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      dest: /tmp/get_helm.sh
+      mode: '0700'
 
 - name: Run Helm installation script
-ansible.builtin.shell: /tmp/get_helm.sh
-args:
-  creates: /usr/local/bin/helm
+  ansible.builtin.shell: /tmp/get_helm.sh
+  args:
+    creates: /usr/local/bin/helm
 
 - name: Add nginx-ingress Helm repo
-ansible.builtin.command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-register: helm_repo_result
+  ansible.builtin.command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  register: helm_repo_result
 
 - name: Update Helm repos
-ansible.builtin.command: helm repo update
-when: helm_repo_result.changed
+  ansible.builtin.command: helm repo update
+  when: helm_repo_result.changed
 
 - name: Install nginx-ingress controller
-ansible.builtin.command: helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default
+  ansible.builtin.command: helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default
 
 - name: Create deployment pulling private image
-kubernetes.core.k8s:
-  state: present
-  kubeconfig: /home/ubuntu/.kube/config
-  definition:
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: app-container
-      namespace: default
-    spec:
-      replicas: 4
-      selector:
-        matchLabels:
-          app: demo-app
-      template:
-        metadata:
-          labels:
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: app-container
+        namespace: default
+      spec:
+        replicas: 4
+        selector:
+          matchLabels:
             app: demo-app
-        spec:
-          containers:
-            - name: dum-app-container
-              image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
-              ports:
-                - containerPort: 5000  # The port your application is listening on
-          imagePullSecrets:
-            - name: gitlab-cred
+        template:
+          metadata:
+            labels:
+              app: demo-app
+          spec:
+            containers:
+              - name: dum-app-container
+                image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
+                ports:
+                  - containerPort: 5000  # The port your application is listening on
+            imagePullSecrets:
+              - name: gitlab-cred
 
 - name: Expose deployment using ClusterIP
-kubernetes.core.k8s:
-  state: present
-  kubeconfig: /home/ubuntu/.kube/config
-  definition:
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: app-clusterip-service
-      namespace: default
-    spec:
-      type: ClusterIP
-      selector:
-        app: demo-app
-      ports:
-        - protocol: TCP
-          port: 80  # The port on which the service will be exposed
-          targetPort: 5000  # The port your application is listening on
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: app-clusterip-service
+        namespace: default
+      spec:
+        type: ClusterIP
+        selector:
+          app: demo-app
+        ports:
+          - protocol: TCP
+            port: 80  # The port on which the service will be exposed
+            targetPort: 5000  # The port your application is listening on
 
 - name: Create Ingress resource
-kubernetes.core.k8s:
-  state: present
-  kubeconfig: /home/ubuntu/.kube/config
-  definition:
-    apiVersion: networking.k8s.io/v1
-    kind: Ingress
-    metadata:
-      name: app-ingress
-      namespace: default
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
-    spec:
-      rules:
-        - host: your-app.example.com
-          http:
-            paths:
-              - path: /
-                pathType: Prefix
-                backend:
-                  service:
-                    name: app-clusterip-service
-                    port:
-                      number: 80  # This should match the port on the service
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: app-ingress
+        namespace: default
+        annotations:
+          nginx.ingress.kubernetes.io/rewrite-target: /
+      spec:
+        rules:
+          - host: your-app.example.com
+            http:
+              paths:
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: app-clusterip-service
+                      port:
+                        number: 80  # This should match the port on the service
 
 
 # - name: Create deployment pulling private image
