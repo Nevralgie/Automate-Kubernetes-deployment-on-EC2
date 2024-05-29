@@ -45,7 +45,7 @@
         ports:
           - protocol: TCP
             port: 80
-            targetPort: 80
+            targetPort: 5000
             nodePort: 31000  # NodePort range is 30000-32767
 
 
