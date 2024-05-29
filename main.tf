@@ -104,7 +104,7 @@ resource "aws_security_group" "kubernetes_controlplane" {
 }
 
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane" {
   security_group_id = aws_security_group.kubernetes_controlplane.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 22
@@ -165,7 +165,7 @@ resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
   to_port           = 32767
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_workers" {
   security_group_id = aws_security_group.kubernetes_workers.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 22
