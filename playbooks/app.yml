@@ -23,8 +23,7 @@
               - name: dum-app-container
                 image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v0.1
                 ports:
-                  - containerPort: 80
-                    targetPort: 5000
+                  - containerPort: 5000
             imagePullSecrets: 
               - name: gitlab-cred
 
