@@ -86,9 +86,17 @@ apply:
     - terraform init
   script:
     - terraform apply --auto-approve
+    - NODE_GROUP_ID=$(terraform output -raw node_group_id)
+    - CLUSTER_NAME=$(terraform output -raw cluster_name)
+    - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
+    - aws eks describe-nodegroup --cluster-name $CLUSTER_NAME --nodegroup-name $NODE_GROUP_NAME --query "nodegroup.resources[0].config.bootstrap.nodeBootstrapConfig.configData" --output text > node-config.yaml
   dependencies:
     # - plan
     - validate
+  artifacts:
+    paths:
+      - cluster_name
+      - node-config.yaml
   when: manual
 
 provision:
@@ -160,11 +168,13 @@ deploy_app:
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
-    - ansible-playbook -i inventory.aws_ec2.yaml playbook_2.yml
+    - ansible-playbook -i inventory.aws_ec2.yaml playbook_3.yml -e "node_config_file=node-config.yaml" -e "cluster_name=$CLUSTER_NAME"
   when: manual
   needs:
     # - provision
     - job: build-docker-image
+      artifacts: true
+    - job: apply
       artifacts: true
 
 
