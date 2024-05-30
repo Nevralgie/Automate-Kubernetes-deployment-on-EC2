@@ -86,17 +86,16 @@ apply:
     - terraform init
   script:
     - terraform apply --auto-approve
-    - NODE_GROUP_ID=$(terraform output -raw node_group_id)
     - CLUSTER_NAME=$(terraform output -raw cluster_name)
     - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
-    - aws eks describe-nodegroup --cluster-name $CLUSTER_NAME --nodegroup-name $NODE_GROUP_NAME --query "nodegroup.resources[0].config.bootstrap.nodeBootstrapConfig.configData" --output text > node-config.yaml
+    - echo "CLUSTER_NAME=$CLUSTER_NAME" > vars.env
+    - echo "NODE_GROUP_NAME=$NODE_GROUP_NAME" >> vars.env
   dependencies:
     # - plan
     - validate
   artifacts:
     paths:
-      - cluster_name
-      - node-config.yaml
+      - vars.env
   when: manual
 
 provision:
@@ -164,11 +163,12 @@ deploy_app:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
   script:
+    - aws eks describe-nodegroup --cluster-name $CLUSTER_NAME --nodegroup-name $NODE_GROUP_NAME --query "nodegroup.resources[0].config.bootstrap.nodeBootstrapConfig.configData" --output text > node-config.yaml
     - ansible --version
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
-    - ansible-playbook -i inventory.aws_ec2.yaml playbook_3.yml -e "node_config_file=node-config.yaml" -e "cluster_name=$CLUSTER_NAME"
+    - ansible-playbook -i inventory.aws_ec2.yaml playbook_3.yml -e "@vars.env" -e "node_config_file=config.yaml"
   when: manual
   needs:
     # - provision

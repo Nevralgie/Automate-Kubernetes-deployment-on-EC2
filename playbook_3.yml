@@ -1,0 +1,23 @@
+- name: Join the cluster
+  hosts: tag_role_Master
+  gather_facts: yes
+  vars:
+    cluster_name: "{{ ansible_facts['CLUSTER_NAME'] }}"
+    node_group_name: "{{ ansible_facts['NODE_GROUP_NAME'] }}"
+    node_config_file: "{{ ansible_facts['NODE_CONFIG_FILE'] }}"
+  tasks:
+    - name: Install kubectl
+      become: true
+      apt:
+        name: kubectl
+        state: present
+
+    - name: Configure kubectl
+      command: aws eks update-kubeconfig --name {{ cluster_name }} --region {{ region }}
+      environment:
+        HOME: /home/ubuntu/
+
+    - name: Join the cluster
+      command: kubectl apply -f {{ node_config_file }}
+      environment:
+        HOME: /home/ubuntu/
