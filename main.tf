@@ -359,15 +359,15 @@ resource "aws_iam_role_policy_attachment" "node-AmazonEC2ContainerRegistryReadOn
 
 resource "aws_eks_cluster" "main" {
   name     = "Demo-eks"
-  role_arn = aws_iam_role.main.arn
+  role_arn = aws_iam_role.node.arn
 
   vpc_config {
     subnet_ids = [aws_subnet.sub_1_ec2_lb.id, aws_subnet.sub_2_ec2_lb.id]
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.main-AmazonEKSClusterPolicy,
-    aws_iam_role_policy_attachment.main-AmazonEKSServicePolicy,
+    aws_iam_role_policy_attachment.node-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.node-AmazonEKSServicePolicy,
   ]
 }
 
