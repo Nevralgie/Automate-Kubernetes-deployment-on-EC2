@@ -23,11 +23,6 @@
   environment:
         HOME: /home/ubuntu/
 
-- name: Install nginx-ingress controller
-  ansible.builtin.command: helm install nginx-ingress ingress-nginx/ingress-nginx --namespace default
-  environment:
-        HOME: /home/ubuntu/
-
 - name: Create deployment pulling private image
   kubernetes.core.k8s:
     state: present
@@ -39,7 +34,7 @@
         name: app-container
         namespace: default
       spec:
-        replicas: 4
+        replicas: 2
         selector:
           matchLabels:
             app: demo-app
@@ -56,24 +51,24 @@
             imagePullSecrets:
               - name: gitlab-cred
 
-# - name: Expose deployment using ClusterIP
-#   kubernetes.core.k8s:
-#     state: present
-#     kubeconfig: /home/ubuntu/.kube/config
-#     definition:
-#       apiVersion: v1
-#       kind: Service
-#       metadata:
-#         name: app-clusterip-service
-#         namespace: default
-#       spec:
-#         type: ClusterIP
-#         selector:
-#           app: demo-app
-#         ports:
-#           - protocol: TCP
-#             port: 80  # The port on which the service will be exposed
-#             targetPort: 5000  # The port your application is listening on
+- name: Expose deployment using nodePort
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: /home/ubuntu/.kube/config
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: app-nodeport-service
+        namespace: default
+      spec:
+        type: nodePort
+        selector:
+          app: demo-app
+        ports:
+          - protocol: TCP
+            port: 80  # The port on which the service will be exposed
+            targetPort: 5000  # The port your application is listening on
 
 # - name: Create Ingress resource
 #   kubernetes.core.k8s:
