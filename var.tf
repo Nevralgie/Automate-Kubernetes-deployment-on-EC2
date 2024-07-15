@@ -13,7 +13,7 @@ variable "control_plane_instance_number" {
 variable "worker_instance_number" {
   description = "How many controlplane ?"
   type = number
-  default = 4
+  default = 2
 }
 
 # variable "gitlab_token" {

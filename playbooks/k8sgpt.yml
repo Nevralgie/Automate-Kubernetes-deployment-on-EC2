@@ -1,0 +1,38 @@
+# - name: Add nginx-ingress Helm repo
+#   ansible.builtin.command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+#   register: helm_repo_result
+#   environment:
+#         HOME: /home/ubuntu/
+- hosts: tag_role_Master
+  become: true
+  tasks:
+    - name: Update Helm repos
+      ansible.builtin.command: helm repo update
+      when: helm_repo_result.changed
+      environment:
+            HOME: /home/ubuntu/
+
+    - name: Update Helm repos
+      ansible.builtin.command: helm install release k8sgpt/k8sgpt-operator -n k8sgpt-operator-system --create-namespace
+      when: helm_repo_result.changed
+      environment:
+            HOME: /home/ubuntu/
+    - name: Create deployment pulling private image
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: core.k8sgpt.ai/v1alpha1
+          kind: K8sGPT
+          metadata:
+            name: k8sgpt-local-ai
+            namespace: k8sgpt-operator-system
+          spec:
+            ai:
+              enabled: true
+              model: open-llama-13b-open-instruct.ggmlv3.q3_K_M.bin
+              backend: localai
+              baseUrl: http://service-local-ai.k8sgpt-operator-system.svc.cluster.local:8080/v1
+            noCache: false
+            repository: ghcr.io/k8sgpt-ai/k8sgpt
+            version: v0.3.8

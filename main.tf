@@ -155,6 +155,21 @@ resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
   to_port           = 10250
 }
 
+resource "aws_vpc_security_group_ingress_rule" "local_ai" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 8080
+  ip_protocol       = "tcp"
+  to_port           = 8080
+}
+
+resource "aws_vpc_security_group_ingress_rule" "k8sgpt" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 8443
+  ip_protocol       = "tcp"
+  to_port           = 8443
+}
 
 resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
   security_group_id = aws_security_group.kubernetes_workers.id
@@ -217,7 +232,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_out" {
 resource "aws_instance" "control_plane" {
   count         = var.control_plane_instance_number
   ami           = "ami-0326f9264af7e51e2"
-  instance_type = var.environment == "Prod" ? "t3.large" : "t2.medium"
+  instance_type = var.environment == "Prod" ? "t2.2xlarge" : "t3.large"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
   vpc_security_group_ids      = [aws_security_group.kubernetes_workers.id]
@@ -235,7 +250,7 @@ resource "aws_instance" "control_plane" {
 resource "aws_instance" "workers" {
   count = var.worker_instance_number
   ami           = "ami-0326f9264af7e51e2"
-  instance_type = var.environment == "Prod" ? "t3.large" : "t2.micro"
+  instance_type = var.environment == "Prod" ? "t2.2xlarge" : "t3.large"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
   vpc_security_group_ids      = [aws_security_group.kubernetes_controlplane.id]

@@ -1,28 +1,5 @@
 ---
 
-- name: Download Helm installation script
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-    dest: /tmp/get_helm.sh
-    mode: '0700'
-
-- name: Run Helm installation script
-  ansible.builtin.shell: /tmp/get_helm.sh
-  args:
-    creates: /usr/local/bin/helm
-
-- name: Add nginx-ingress Helm repo
-  ansible.builtin.command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-  register: helm_repo_result
-  environment:
-        HOME: /home/ubuntu/
-
-- name: Update Helm repos
-  ansible.builtin.command: helm repo update
-  when: helm_repo_result.changed
-  environment:
-        HOME: /home/ubuntu/
-
 - name: Create deployment pulling private image
   kubernetes.core.k8s:
     state: present
