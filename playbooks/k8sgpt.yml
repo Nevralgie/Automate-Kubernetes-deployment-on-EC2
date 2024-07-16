@@ -17,6 +17,7 @@
       when: helm_repo_result.changed
       environment:
             HOME: /home/ubuntu/
+  
     - name: Create deployment pulling private image
       kubernetes.core.k8s:
         state: present

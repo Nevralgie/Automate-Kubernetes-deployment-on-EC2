@@ -1,3 +1,25 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8sgpt-operator-system
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-pvc
+  namespace: k8sgpt-operator-system
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: gp2
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
