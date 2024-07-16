@@ -1,10 +1,15 @@
-
 plugin: amazon.aws.aws_ec2
 # Set empty values for credentials, as profile conflicts with access_keys with this plugin version
 # aws_access_key: ''
 # aws_secret_key: ''
 # session_token: ''
-profile: aws_profile
+# module_defaults:
+#     group/aws:
+#       access_key: ''
+#       secret_key: ''
+#       session_token: ''
+#       profile: 'aws_profile'
+# profile: 'aws_profile'
 remote_user: ubuntu
 # regions: 
 #   - eu-west-3
