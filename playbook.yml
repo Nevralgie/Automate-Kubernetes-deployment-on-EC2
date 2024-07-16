@@ -1,4 +1,5 @@
 ---
+- import_playbook: ./playbooks/host_conf.yml
 - import_playbook: ./playbooks/kube-dependencies_master.yml
 - import_playbook: ./playbooks/kube-dependencies_workers.yml
 - import_playbook: ./playbooks/master.yml

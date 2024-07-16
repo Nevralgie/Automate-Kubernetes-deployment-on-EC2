@@ -1,0 +1,22 @@
+- name: Gather EC2 instances information
+  hosts: localhost
+  tasks:
+    - name: Gather EC2 instances info
+      ec2_instance_facts:
+        filters:
+          "tag:Name": "tag_role_Master"  # Adjust this filter based on your tagging
+          "tag:Name": "tag_role_Worker"
+      register: ec2_info
+
+- name: Update /etc/hosts on all EC2 instances
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure /etc/hosts has entries for all EC2 instances
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {% for instance in hostvars['localhost']['ec2_info']['instances'] %}
+          {{ instance.private_ip_address }} {{ instance.tags.Name }}
+          {% endfor %}
+      when: ec2_info.instances is defined
