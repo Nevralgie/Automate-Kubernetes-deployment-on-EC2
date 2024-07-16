@@ -112,6 +112,9 @@ deploy_app:
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
   script:
     # - aws eks describe-nodegroup --cluster-name $CLUSTER_NAME --nodegroup-name $NODE_GROUP_NAME --query "nodegroup.resources[0].config.bootstrap.nodeBootstrapConfig.configData" --output text > node-config.yaml
+    - cat ~/.aws/credentials
+    - cat ~/.aws/config
+    - aws sts get-caller-identity
     - ansible --version
     - ansible -m ping all
     - ansible-inventory --list
