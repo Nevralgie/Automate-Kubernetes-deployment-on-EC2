@@ -9,94 +9,94 @@ stages:
   - provision
   - destroy
 
-build-docker-image:
-  stage: build
-  image: docker:24.0.5
-  services:
-    - docker:dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "" # Vide pour l'instant pour établie la connection entre les conteneurs
-  before_script:
-    - mkdir -p $DOCKER_CONFIG  # Ensure the Docker config directory exists
-    - echo $REGISTRY_TOKEN | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin # Connection au registry gitlab
-  script:
-    - echo "Yé boiiiiii"
-    - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1 ./app
-    - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1
-  artifacts:
-    paths:
-      - .docker/config.json
-  tags:
-    - build_job_docker
-  # when: manual
+# build-docker-image:
+#   stage: build
+#   image: docker:24.0.5
+#   services:
+#     - docker:dind
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#     DOCKER_TLS_CERTDIR: "" # Vide pour l'instant pour établie la connection entre les conteneurs
+#   before_script:
+#     - mkdir -p $DOCKER_CONFIG  # Ensure the Docker config directory exists
+#     - echo $REGISTRY_TOKEN | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin # Connection au registry gitlab
+#   script:
+#     - echo "Yé boiiiiii"
+#     - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1 ./app
+#     - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v0.1
+#   artifacts:
+#     paths:
+#       - .docker/config.json
+#   tags:
+#     - build_job_docker
+#   # when: manual
 
-validate:
-  stage: validate
-  image:
-    name: hashicorp/terraform:latest
-    entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-  before_script:
-    # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-    # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    - rm -rf .terraform
-    - terraform --version
-    - terraform init
-  script:
-    - terraform fmt -recursive
-    - terraform validate
-  artifacts:
-    paths:
-      - aws.cfg
-  when: manual
-        # on_success
+# validate:
+#   stage: validate
+#   image:
+#     name: hashicorp/terraform:latest
+#     entrypoint:
+#       - '/usr/bin/env'
+#       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+#   before_script:
+#     # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+#     # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+#     - rm -rf .terraform
+#     - terraform --version
+#     - terraform init
+#   script:
+#     - terraform fmt -recursive
+#     - terraform validate
+#   artifacts:
+#     paths:
+#       - aws.cfg
+#   when: manual
+#         # on_success
 
-plan:
-  stage: plan
-  image:
-    name: hashicorp/terraform:latest
-    entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-  before_script:
-    - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    - rm -rf .terraform
-    - terraform --version
-    - terraform init
-  script:
-    - terraform plan
-  dependencies:
-    - validate
+# plan:
+#   stage: plan
+#   image:
+#     name: hashicorp/terraform:latest
+#     entrypoint:
+#       - '/usr/bin/env'
+#       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+#   before_script:
+#     - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+#     - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+#     - rm -rf .terraform
+#     - terraform --version
+#     - terraform init
+#   script:
+#     - terraform plan
+#   dependencies:
+#     - validate
 
-apply:
-  stage: apply
-  image:
-    name: hashicorp/terraform:latest
-    entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-  before_script:
-    # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-    # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    - rm -rf .terraform
-    - terraform --version
-    - terraform init
-  script:
-    - terraform apply --auto-approve
-    # - CLUSTER_NAME=$(terraform output -raw cluster_name)
-    # - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
-    # - echo "CLUSTER_NAME=$CLUSTER_NAME" > vars.env
-    # - echo "NODE_GROUP_NAME=$NODE_GROUP_NAME" >> vars.env
-  dependencies:
-    # - plan
-    - validate
-  # artifacts:
-  #   paths:
-  #     - vars.env
-  when: manual
+# apply:
+#   stage: apply
+#   image:
+#     name: hashicorp/terraform:latest
+#     entrypoint:
+#       - '/usr/bin/env'
+#       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+#   before_script:
+#     # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+#     # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+#     - rm -rf .terraform
+#     - terraform --version
+#     - terraform init
+#   script:
+#     - terraform apply --auto-approve
+#     # - CLUSTER_NAME=$(terraform output -raw cluster_name)
+#     # - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
+#     # - echo "CLUSTER_NAME=$CLUSTER_NAME" > vars.env
+#     # - echo "NODE_GROUP_NAME=$NODE_GROUP_NAME" >> vars.env
+#   dependencies:
+#     # - plan
+#     - validate
+#   # artifacts:
+#   #   paths:
+#   #     - vars.env
+#   when: manual
 
 deploy_app:
   stage: provision
@@ -118,12 +118,12 @@ deploy_app:
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml # -e "@vars.env" -e "node_config_file=config.yaml"
   when: manual
-  needs:
-    # - provision
-    - job: build-docker-image
-      artifacts: true
-    - job: apply
-      artifacts: true
+  # needs:
+  #   # - provision
+  #   # - job: build-docker-image
+  #   #   artifacts: true
+  #   - job: apply
+  #     artifacts: true
 
 
 destroy:
