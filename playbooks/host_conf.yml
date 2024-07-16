@@ -6,7 +6,8 @@
     - name: Gather EC2 instances info
       amazon.aws.ec2_instance_info:
         filters:
-          { tag:role: "Master", tag:role: "Worker" } # Adjust this filter based on your tagging
+          - tag:role: "Master", 
+          - tag:role: "Worker" # Adjust this filter based on your tagging
       register: ec2_info
 
 - name: Set host facts for each EC2 instance
@@ -23,7 +24,6 @@
 
 - name: Update /etc/hosts on all EC2 instances
   hosts: all
-  become: ansible_user
   tasks:
     - name: Ensure /etc/hosts has entries for all EC2 instances
       blockinfile:
