@@ -3,12 +3,12 @@ plugin: amazon.aws.aws_ec2
 # aws_access_key: ''
 # aws_secret_key: ''
 # session_token: ''
-# module_defaults:
-#     group/aws:
-#       access_key: ''
-#       secret_key: ''
-#       session_token: ''
-#       profile: 'aws_profile'
+module_defaults:
+    group/aws:
+      access_key: ''
+      secret_key: ''
+      session_token: ''
+      profile: 'aws_profile'
 # profile: 'aws_profile'
 remote_user: ubuntu
 # regions: 
