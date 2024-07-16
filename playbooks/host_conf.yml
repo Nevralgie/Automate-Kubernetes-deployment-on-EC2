@@ -2,6 +2,12 @@
 - name: Gather EC2 instances information
   hosts: localhost
   gather_facts: no
+  module_defaults:
+    group/aws:
+      access_key: ''
+      secret_key: ''
+      session_token: ''
+      profile: 'aws_profile'
   tasks:
     - name: Gather EC2 instances info
       amazon.aws.ec2_instance_info:
