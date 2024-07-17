@@ -235,7 +235,7 @@ resource "aws_instance" "control_plane" {
   instance_type = var.environment == "Prod" ? "t2.2xlarge" : "t3.large"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
-  vpc_security_group_ids      = [aws_security_group.kubernetes_workers.id]
+  vpc_security_group_ids      = [aws_security_group.kubernetes_controlplane.id]
   associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
@@ -253,7 +253,7 @@ resource "aws_instance" "workers" {
   instance_type = var.environment == "Prod" ? "t2.2xlarge" : "t3.large"
   key_name      = "Pjpro_key"
   subnet_id                   = aws_subnet.sub_1_ec2_lb.id
-  vpc_security_group_ids      = [aws_security_group.kubernetes_controlplane.id]
+  vpc_security_group_ids      = [aws_security_group.kubernetes_workers.id]
   associate_public_ip_address = true
 
   #user_data = file("${path.module}/setup.sh")
