@@ -241,7 +241,7 @@ resource "aws_instance" "control_plane" {
   #user_data = file("${path.module}/setup.sh")
 
   tags = {
-    Name = "Controlplane ${count.index + 1}"
+    Name = "controlplane_${count.index + 1}"
     role = "Master"
     environment = var.environment
   }
@@ -259,7 +259,7 @@ resource "aws_instance" "workers" {
   #user_data = file("${path.module}/setup.sh")
 
   tags = {
-    Name = "K8s Worker ${count.index + 1}"
+    Name = "kube_worker_${count.index + 1}"
     role = "Worker"
     environment = var.environment
   }

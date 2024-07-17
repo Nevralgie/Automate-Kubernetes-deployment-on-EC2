@@ -12,7 +12,7 @@
     - name: Gather EC2 instances info
       amazon.aws.ec2_instance_info:
         filters:
-          "tag:role": Master # Adjust this filter based on your tagging
+          tag:role: Master,role:Worker # Adjust this filter based on your tagging
       register: ec2_info
 
 - name: Set host facts for each EC2 instance
