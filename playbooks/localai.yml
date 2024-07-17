@@ -1,15 +1,15 @@
 - hosts: tag_role_Master
   become: true
   tasks:
-    - name: Install Piplibrary
-      apt:
-        name: python3-pip
-        state: present
+    # - name: Install Piplibrary
+    #   apt:
+    #     name: python3-pip
+    #     state: present
 
-    - name: Install Kubernetes Python library
-      pip:
-        name: kubernetes
-        state: present
+    # - name: Install Kubernetes Python library
+    #   pip:
+    #     name: kubernetes
+    #     state: present
       
     - name: Create namespace
       kubernetes.core.k8s:
