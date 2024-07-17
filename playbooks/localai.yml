@@ -20,6 +20,25 @@
           kind: Namespace
           metadata:
             name: k8sgpt-operator-system
+    
+  
+    - name: Create storageclass
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: standard-ebs
+          provisioner: kubernetes.io/aws-ebs
+          parameters:
+            type: gp2
+            fsType: ext4
+            encrypted: "false"
+          reclaimPolicy: Delete
+          volumeBindingMode: WaitForFirstConsumer
+
 
     - name: Create pvc
       kubernetes.core.k8s:
@@ -37,7 +56,7 @@
             resources:
               requests:
                 storage: 30Gi
-            storageClassName: default
+            storageClassName: standard-ebs
 
     - name: Create localai deployment
       kubernetes.core.k8s:
