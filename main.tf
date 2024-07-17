@@ -111,7 +111,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane" {
   to_port           = 22
 }
 
-resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp_ctl" {
   security_group_id = aws_security_group.kubernetes_controlplane.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
   from_port         = 179
@@ -155,7 +155,7 @@ resource "aws_security_group" "kubernetes_workers" {
   vpc_id      = aws_vpc.main_vpc.id 
 }
 
-resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp_wks" {
   security_group_id = aws_security_group.kubernetes_workers.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
   from_port         = 179
@@ -163,7 +163,7 @@ resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
   to_port           = 179
 }
 
-resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp_ctltowks" {
   security_group_id = aws_security_group.kubernetes_workers.id
   referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
   from_port         = 179
