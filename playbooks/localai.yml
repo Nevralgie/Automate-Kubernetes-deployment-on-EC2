@@ -22,22 +22,42 @@
             name: k8sgpt-operator-system
     
   
-    - name: Create storageclass
+    # - name: Create storageclass
+    #   kubernetes.core.k8s:
+    #     state: present
+    #     kubeconfig: /home/ubuntu/.kube/config
+    #     definition:
+    #       apiVersion: storage.k8s.io/v1
+    #       kind: StorageClass
+    #       metadata:
+    #         name: standard-ebs
+    #       provisioner: kubernetes.io/aws-ebs
+    #       parameters:
+    #         type: gp2
+    #         fsType: ext4
+    #         encrypted: "false"
+    #       reclaimPolicy: Delete
+    #       volumeBindingMode: WaitForFirstConsumer
+    - - name: Create PV
       kubernetes.core.k8s:
         state: present
         kubeconfig: /home/ubuntu/.kube/config
         definition:
-          apiVersion: storage.k8s.io/v1
-          kind: StorageClass
+          apiVersion: v1
+          kind: PersistentVolume
           metadata:
-            name: standard-ebs
-          provisioner: kubernetes.io/aws-ebs
-          parameters:
-            type: gp2
-            fsType: ext4
-            encrypted: "false"
-          reclaimPolicy: Delete
-          volumeBindingMode: WaitForFirstConsumer
+            name: ebs-localai-vol
+          spec:
+            capacity:
+              storage: 100Gi
+            accessModes:
+              - ReadWriteOnce
+            persistentVolumeReclaimPolicy: Retain
+            storageClassName: manual
+            csi:
+              driver: ebs.csi.aws.com
+              volumeHandle: "{{ volume_id }}"  # Replace <volume-id> with the actual EBS volume ID
+              fsType: ext4
 
 
     - name: Create pvc
@@ -55,8 +75,8 @@
               - ReadWriteOnce
             resources:
               requests:
-                storage: 30Gi
-            storageClassName: standard-ebs
+                storage: 40Gi
+            storageClassName: manual
 
     - name: Create localai deployment
       kubernetes.core.k8s:
