@@ -38,7 +38,7 @@
     #         encrypted: "false"
     #       reclaimPolicy: Delete
     #       volumeBindingMode: WaitForFirstConsumer
-    - - name: Create PV
+    - name: Create PV
       kubernetes.core.k8s:
         state: present
         kubeconfig: /home/ubuntu/.kube/config
