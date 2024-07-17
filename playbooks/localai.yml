@@ -37,9 +37,9 @@
             resources:
               requests:
                 storage: 30Gi
-            storageClassName: gp2
+            storageClassName: default
 
-    - name: Create pvc
+    - name: Create localai deployment
       kubernetes.core.k8s:
         state: present
         kubeconfig: /home/ubuntu/.kube/config
