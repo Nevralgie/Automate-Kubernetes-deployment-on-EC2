@@ -1,8 +1,8 @@
 plugin: amazon.aws.aws_ec2
 # Set empty values for credentials, as profile conflicts with access_keys with this plugin version
-# aws_access_key: ''
-# aws_secret_key: ''
-# session_token: ''
+aws_access_key: ''
+aws_secret_key: ''
+session_token: ''
 # module_defaults:
 #     group/aws:
 #       access_key: ''
