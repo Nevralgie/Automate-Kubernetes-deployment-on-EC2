@@ -17,7 +17,7 @@
             HOME: /home/ubuntu/
 
     - name: Install k8sgpt packages
-      ansible.builtin.command: helm install releasek8sgpt k8sgpt/k8sgpt-operator -n k8sgpt-operator-system --create-namespace
+      ansible.builtin.command: helm install releasek8sgpt k8sgpt/k8sgpt-operator -n k8sgpt-operator-system
       environment:
             HOME: /home/ubuntu/
   

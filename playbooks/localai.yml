@@ -11,15 +11,15 @@
     #     name: kubernetes
     #     state: present
       
-    # - name: Create namespace
-    #   kubernetes.core.k8s:
-    #     state: present
-    #     kubeconfig: /home/ubuntu/.kube/config
-    #     definition:
-    #       apiVersion: v1
-    #       kind: Namespace
-    #       metadata:
-    #         name: k8sgpt-operator-system
+    - name: Create namespace
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: k8sgpt-operator-system
 
     - name: Create pvc
       kubernetes.core.k8s:
