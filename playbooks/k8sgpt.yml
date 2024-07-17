@@ -18,7 +18,6 @@
 
     - name: Install k8sgpt packages
       ansible.builtin.command: helm install releasek8sgpt k8sgpt/k8sgpt-operator -n k8sgpt-operator-system --create-namespace
-      when: helm_repo_result.changed
       environment:
             HOME: /home/ubuntu/
   
