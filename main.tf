@@ -163,6 +163,14 @@ resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
   to_port           = 179
 }
 
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
+  from_port         = 179
+  ip_protocol       = "tcp"
+  to_port           = 179
+}
+
 resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
   security_group_id = aws_security_group.kubernetes_workers.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
