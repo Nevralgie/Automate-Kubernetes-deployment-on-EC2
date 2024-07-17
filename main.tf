@@ -111,6 +111,14 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane" {
   to_port           = 22
 }
 
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+  security_group_id = aws_security_group.kubernetes_controlplane.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 179
+  ip_protocol       = "tcp"
+  to_port           = 179
+}
+
 resource "aws_vpc_security_group_ingress_rule" "allow_kube_api" {
   security_group_id = aws_security_group.kubernetes_controlplane.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
@@ -145,6 +153,14 @@ resource "aws_security_group" "kubernetes_workers" {
   name        = "workers_sg"
   description = "Allow SSH and necessary ports for k8s cluster - workers"
   vpc_id      = aws_vpc.main_vpc.id 
+}
+
+resource "aws_vpc_security_group_ingress_rule" "calico_networking_bgp" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 179
+  ip_protocol       = "tcp"
+  to_port           = 179
 }
 
 resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
