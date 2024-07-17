@@ -71,32 +71,32 @@ stages:
 #   dependencies:
 #     - validate
 
-# apply:
-#   stage: apply
-#   image:
-#     name: hashicorp/terraform:latest
-#     entrypoint:
-#       - '/usr/bin/env'
-#       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-#   before_script:
-#     # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
-#     # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-#     - rm -rf .terraform
-#     - terraform --version
-#     - terraform init
-#   script:
-#     - terraform apply --auto-approve
-#     # - CLUSTER_NAME=$(terraform output -raw cluster_name)
-#     # - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
-#     # - echo "CLUSTER_NAME=$CLUSTER_NAME" > vars.env
-#     # - echo "NODE_GROUP_NAME=$NODE_GROUP_NAME" >> vars.env
-#   dependencies:
-#     # - plan
-#     - validate
-#   # artifacts:
-#   #   paths:
-#   #     - vars.env
-#   when: manual
+apply:
+  stage: apply
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    # - export AWS_ACCESS_KEY=${AWS_ACCESS_KEY_ID}
+    # - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - rm -rf .terraform
+    - terraform --version
+    - terraform init
+  script:
+    - terraform apply --auto-approve
+    # - CLUSTER_NAME=$(terraform output -raw cluster_name)
+    # - NODE_GROUP_NAME=$(terraform output -raw node_group_name)
+    # - echo "CLUSTER_NAME=$CLUSTER_NAME" > vars.env
+    # - echo "NODE_GROUP_NAME=$NODE_GROUP_NAME" >> vars.env
+  # dependencies:
+  #   # - plan
+  #   - validate
+  # artifacts:
+  #   paths:
+  #     - vars.env
+  when: manual
 
 deploy_app:
   stage: provision
