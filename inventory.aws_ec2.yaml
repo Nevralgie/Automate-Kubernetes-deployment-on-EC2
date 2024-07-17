@@ -9,10 +9,10 @@ plugin: amazon.aws.aws_ec2
 #       secret_key: ''
 #       session_token: ''
 #       profile: 'aws_profile'
-# profile: 'aws_profile'
+profile: 'aws_profile'
 remote_user: ubuntu
-# regions: 
-#   - eu-west-3
+regions: 
+  - eu-west-3
 # keyed_groups:
 #   - key: Name
 #     prefix: Control
