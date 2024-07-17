@@ -29,6 +29,7 @@
 
 - name: Update /etc/hosts on all EC2 instances
   hosts: all
+  become: true
   tasks:
     - name: Ensure /etc/hosts has entries for all EC2 instances
       blockinfile:
