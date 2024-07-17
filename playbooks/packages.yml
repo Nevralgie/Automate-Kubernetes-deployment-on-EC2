@@ -1,5 +1,5 @@
 ---
-- name: Install Helm on Ubuntu 22.04
+- name: Install necessary packages on Ubuntu 22.04
   hosts: tag_role_Master
   become: yes
   tasks:
