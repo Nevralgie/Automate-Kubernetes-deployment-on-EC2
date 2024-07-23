@@ -45,7 +45,6 @@ validate:
   artifacts:
     paths:
       - aws.cfg
-  when: manual
         # on_success
 
 plan:
@@ -63,7 +62,7 @@ plan:
     - terraform init
   script:
     - terraform plan
-  dependencies:
+  needs:
     - validate
 
 apply:
@@ -114,7 +113,6 @@ deploy_app:
     - ansible-inventory --list
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" # -e "@vars.env" -e "node_config_file=config.yaml"
-  when: manual
   # needs:
   #   # - provision
   #   # - job: build-docker-image
