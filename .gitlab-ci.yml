@@ -113,12 +113,11 @@ deploy_app:
     - ansible-inventory --list
     - ansible-inventory --graph
     - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" # -e "@vars.env" -e "node_config_file=config.yaml"
-  # needs:
-  #   # - provision
-  #   # - job: build-docker-image
-  #   #   artifacts: true
-  #   - job: apply
-  #     artifacts: true
+  needs:
+    - job: build-docker-image
+      artifacts: true
+    - job: apply
+      artifacts: true
 
 
 destroy:
