@@ -10,6 +10,7 @@
           kind: Deployment
           metadata:
             name: mysql
+            namespace: default
           spec:
             selector:
               matchLabels:
@@ -40,6 +41,7 @@
           kind: Service
           metadata:
             name: mysql
+            namespace: default
           spec:
             type: ClusterIP
             ports:
@@ -57,6 +59,7 @@
           kind: Pod
           metadata:
             name: mysql-client
+            namespace: default
           spec:
             containers:
             - name: mysql-client
