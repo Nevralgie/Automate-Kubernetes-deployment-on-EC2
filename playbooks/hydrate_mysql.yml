@@ -10,6 +10,7 @@
           kind: ConfigMap
           metadata:
             name: hydrate-script
+            namespace: default
           data:
             hydrate.sql: |
               CREATE DATABASE devdb;
@@ -29,6 +30,7 @@
         kind: Job
         metadata:
           name: hydrate-mysql
+          namespace: default
         spec:
           template:
             spec:
