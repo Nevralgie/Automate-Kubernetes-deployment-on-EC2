@@ -1,0 +1,64 @@
+- hosts: tag_role_Master
+  become: true
+  tasks:
+    - name: Create mysql deployment
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+          name: mysql
+          spec:
+          selector:
+            matchLabels:
+              app: mysql
+          strategy:
+            type: Recreate
+          template:
+            metadata:
+              labels:
+                app: mysql
+            spec:
+              containers:
+              - image: mysql:5.7
+                name: mysql
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                  value: "Devtest01"
+                ports:
+                - containerPort: 3306
+                  name: mysql
+
+    - name: Privately expose mysql deployment
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: mysql
+          spec:
+            type: clusterIp
+            ports:
+            - port: 3306
+            selector:
+              app: mysql
+    
+    - name: Create ephemeral container to test the connection to the database
+      kubernetes.core.k8s:
+        state: present
+        kubeconfig: /home/ubuntu/.kube/config
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: mysql-client
+          spec:
+            containers:
+            - name: mysql-client
+              image: mysql:5.7
+              command: ["sh", "-c", "until mysql -h mysql -uroot -pDevtest01 -e 'show databases'; do echo waiting for mysql; sleep 5; done"]
+            restartPolicy: OnFailure
