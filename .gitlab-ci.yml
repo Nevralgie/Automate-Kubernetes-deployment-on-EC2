@@ -112,7 +112,7 @@ deploy_app:
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
-    - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" -e key_path=.docker/config.json # -e "@vars.env" -e "node_config_file=config.yaml"
+    - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" # -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
   needs:
     - job: build-docker-image
       artifacts: true
