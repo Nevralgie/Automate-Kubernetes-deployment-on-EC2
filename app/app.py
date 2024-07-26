@@ -23,7 +23,7 @@ stock_names = ['AAPL', 'AMZN', 'MSFT']  # Replace with your desired stock symbol
 mysql_config = {
     'user': 'workshop_reader',
     'password': '@Cdevops_69100',
-    'host': 'mysql',  # Service name in Kubernetes
+    'host': 'mysql.default.svc.cluster.local',  # Service name in Kubernetes
     'database': 'devdb'
 }
 
