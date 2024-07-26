@@ -9,27 +9,27 @@
           apiVersion: apps/v1
           kind: Deployment
           metadata:
-          name: mysql
+            name: mysql
           spec:
-          selector:
-            matchLabels:
-              app: mysql
-          strategy:
-            type: Recreate
-          template:
-            metadata:
-              labels:
+            selector:
+              matchLabels:
                 app: mysql
-            spec:
-              containers:
-              - image: mysql:5.7
-                name: mysql
-                env:
-                - name: MYSQL_ROOT_PASSWORD
-                  value: "Devtest01"
-                ports:
-                - containerPort: 3306
+            strategy:
+              type: Recreate
+            template:
+              metadata:
+                labels:
+                  app: mysql
+              spec:
+                containers:
+                - image: mysql:5.7
                   name: mysql
+                  env:
+                  - name: MYSQL_ROOT_PASSWORD
+                    value: "Devtest01"
+                  ports:
+                  - containerPort: 3306
+                    name: mysql
 
     - name: Privately expose mysql deployment
       kubernetes.core.k8s:
