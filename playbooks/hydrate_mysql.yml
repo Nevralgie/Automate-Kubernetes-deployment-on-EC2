@@ -1,7 +1,7 @@
 - hosts: tag_role_Master
   become: true
   tasks:
-    - name: Create k8sgpt crd
+    - name: Create configmap for mysql db
       kubernetes.core.k8s:
         state: present
         kubeconfig: /home/ubuntu/.kube/config
@@ -21,29 +21,29 @@
               INSERT INTO stock_data (Date, Open, High, Low, Close, AdjClose, Volume, StockName) VALUES ('2022-01-03', 123.45, 125.67, 121.34, 124.56, 123.12, 56789012, 'MSFT');
               INSERT INTO stock_data (Date, Open, High, Low, Close, AdjClose, Volume, StockName) VALUES ('2022-01-03', 345.67, 356.78, 341.23, 350.11, 348.90, 12345678, 'AMZN');
     
-    - name: Create k8sgpt crd
+    - name: Hydrate the db
       kubernetes.core.k8s:
         state: present
         kubeconfig: /home/ubuntu/.kube/config
         definition:
-        apiVersion: batch/v1
-        kind: Job
-        metadata:
-          name: hydrate-mysql
-          namespace: default
-        spec:
-          template:
-            spec:
-              containers:
-              - name: mysql
-                image: mysql:5.7
-                command: ["sh", "-c", "mysql -h mysql -uroot -pDevtest01 < /data/hydrate.sql"]
-                volumeMounts:
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: hydrate-mysql
+            namespace: default
+          spec:
+            template:
+              spec:
+                containers:
+                - name: mysql
+                  image: mysql:5.7
+                  command: ["sh", "-c", "mysql -h mysql -uroot -pDevtest01 < /data/hydrate.sql"]
+                  volumeMounts:
+                  - name: hydrate-script
+                    mountPath: /data
+                restartPolicy: OnFailure
+                volumes:
                 - name: hydrate-script
-                  mountPath: /data
-              restartPolicy: OnFailure
-              volumes:
-              - name: hydrate-script
-                configMap:
-                  name: hydrate-script
+                  configMap:
+                    name: hydrate-script
       
