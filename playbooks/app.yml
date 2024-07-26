@@ -40,7 +40,7 @@
             name: app-nodeport-service
             namespace: default
           spec:
-            type: nodePort
+            type: NodePort
             selector:
               app: demo-app
             ports:
