@@ -37,7 +37,7 @@
                 containers:
                 - name: mysql
                   image: mysql:5.7
-                  command: ["sh", "-c", "mysql -h mysql -uroot -pDevtest01 < /data/hydrate.sql"]
+                  command: ["sh", "-c", "mysql -h mysql-service -uroot -pDevtest01 < /data/hydrate.sql"]
                   volumeMounts:
                   - name: hydrate-script
                     mountPath: /data
