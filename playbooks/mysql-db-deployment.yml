@@ -40,7 +40,7 @@
           apiVersion: v1
           kind: Service
           metadata:
-            name: mysql-service
+            name: mysql
             namespace: default
           spec:
             type: ClusterIP
@@ -65,5 +65,5 @@
             containers:
             - name: mysql-client
               image: mysql:5.7
-              command: ["sh", "-c", "until mysql -h mysql-service -uroot -pDevtest01 -e 'show databases'; do echo waiting for mysql; sleep 5; done"]
+              command: ["sh", "-c", "until mysql -h mysql -uroot -pDevtest01 -e 'show databases'; do echo waiting for mysql; sleep 5; done"]
             restartPolicy: OnFailure
