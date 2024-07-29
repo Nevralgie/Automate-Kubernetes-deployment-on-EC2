@@ -212,6 +212,14 @@ resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
   to_port           = 32767
 }
 
+resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 30131
+  ip_protocol       = "tcp"
+  to_port           = 30131
+}
+
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_workers" {
   security_group_id = aws_security_group.kubernetes_workers.id
   cidr_ipv4         = "0.0.0.0/0"
