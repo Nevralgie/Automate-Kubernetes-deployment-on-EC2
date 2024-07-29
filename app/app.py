@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-# import yfinance as yf
+import yfinance as yf
 import mysql.connector
 import pandas as pd
 import numpy as np
