@@ -107,4 +107,4 @@ def index():
     return render_template('stock_analysis.html', stock_data=stock_data)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
