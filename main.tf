@@ -180,6 +180,14 @@ resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
   to_port           = 10259
 }
 
+resource "aws_vpc_security_group_ingress_rule" "kubelet_api" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
+  from_port         = 10250
+  ip_protocol       = "tcp"
+  to_port           = 10259
+}
+
 resource "aws_vpc_security_group_ingress_rule" "local_ai" {
   security_group_id = aws_security_group.kubernetes_workers.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
