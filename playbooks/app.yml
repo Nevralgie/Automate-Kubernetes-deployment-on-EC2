@@ -45,7 +45,7 @@
               app: demo-app
             ports:
               - protocol: TCP
-                port: 80  # The port on which the service will be exposed
+                port: 5000  # The port on which the service will be exposed
                 targetPort: 5000  # The port your application is listening on
 
 # - name: Create Ingress resource
