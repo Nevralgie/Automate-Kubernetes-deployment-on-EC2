@@ -20,42 +20,42 @@ img = io.BytesIO()
 stock_names = ['AAPL', 'AMZN', 'MSFT']  # Replace with your desired stock symbols
 
 # MySQL connection details (hardcoded for now)
-mysql_config = {
-    'user': 'workshop_reader',
-    'password': '@Cdevops_69100',
-    'host': 'mysql.default.svc.cluster.local',  # Service name in Kubernetes
-    'database': 'devdb'
-}
+# mysql_config = {
+#     'user': 'workshop_reader',
+#     'password': '@Cdevops_69100',
+#     'host': 'mysql.default.svc.cluster.local',  # Service name in Kubernetes
+#     'database': 'devdb'
+# }
 
 # Function to fetch stock data from MySQL
-def fetch_from_mysql(stock_name):
-    conn = mysql.connector.connect(**mysql_config)
-    cursor = conn.cursor()
+# def fetch_from_mysql(stock_name):
+#     conn = mysql.connector.connect(**mysql_config)
+#     cursor = conn.cursor()
 
-    query = f"""
-    SELECT Date, Open, High, Low, Close, AdjClose, Volume
-    FROM stock_data
-    WHERE StockName = %s
-    ORDER BY Date DESC
-    LIMIT 100
-    """
-    cursor.execute(query, (stock_name,))
-    rows = cursor.fetchall()
+#     query = f"""
+#     SELECT Date, Open, High, Low, Close, AdjClose, Volume
+#     FROM stock_data
+#     WHERE StockName = %s
+#     ORDER BY Date DESC
+#     LIMIT 100
+#     """
+#     cursor.execute(query, (stock_name,))
+#     rows = cursor.fetchall()
 
-    # Convert to DataFrame
-    data = pd.DataFrame(rows, columns=['Date', 'Open', 'High', 'Low', 'Close', 'AdjClose', 'Volume'])
-    data.set_index('Date', inplace=True)
+#     # Convert to DataFrame
+#     data = pd.DataFrame(rows, columns=['Date', 'Open', 'High', 'Low', 'Close', 'AdjClose', 'Volume'])
+#     data.set_index('Date', inplace=True)
 
-    cursor.close()
-    conn.close()
-    return data
+#     cursor.close()
+#     conn.close()
+#     return data
 
 # Perform stock market analysis for each stock name
 stock_data = {}
 for stock_name in stock_names:
     # Fetch stock data
-    # data = yf.download(stock_name, start='2022-01-01', end='2023-01-01')
-    data = fetch_from_mysql(stock_name)
+    data = yf.download(stock_name, start='2022-01-01', end='2023-01-01')
+    # data = fetch_from_mysql(stock_name)
     # print(data)
 
 # Calculate 50-day moving average
