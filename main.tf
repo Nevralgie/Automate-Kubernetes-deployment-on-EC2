@@ -253,7 +253,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_out" {
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
-
+/*
 resource "aws_db_instance" "default" {
   allocated_storage    = 20
   db_name              = "db_app"
@@ -269,7 +269,7 @@ resource "aws_db_instance" "default" {
   skip_final_snapshot  = var.environment == "Prod" ? false : true
   final_snapshot_identifier = var.environment == "Prod" ? "Db_snapshot" : null
 }
-
+*/
 resource "aws_instance" "control_plane" {
   count         = var.control_plane_instance_number
   ami           = "ami-0326f9264af7e51e2"
@@ -324,6 +324,7 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
   }
 }
 
+/*
 # Outputs for RDS instance
 output "database_endpoint" {
   description = "The endpoint of the database"
@@ -345,7 +346,7 @@ output "database_name" {
   description = "The name of the database"
   value       = aws_db_instance.default.db_name
 }
-
+*/
 output "ctrl_instance_name" {
   value = aws_instance.workers[*].tags
 }
