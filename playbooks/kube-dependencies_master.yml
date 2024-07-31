@@ -31,7 +31,7 @@
     # Configure sysctl settings for Kubernetes
     - name: Configure sysctl settings
       copy:
-        dest: "/etc/sysctl.d/99-kubernetes-cri.conf"  # Destination file path
+        dest: "/etc/sysctl.d/kubernetes.conf"  # Destination file path
         content: |
           net.ipv4.ip_forward = 1
           net.bridge.bridge-nf-call-ip6tables = 1
@@ -59,6 +59,7 @@
         state: present  # Ensure package is present
       loop:
         - apt-transport-https
+        - gnupg2
         - ca-certificates
         - curl
         - containerd
