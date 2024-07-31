@@ -70,12 +70,9 @@
         state: present
         keyring: /etc/apt/trusted.gpg.d/docker.gpg
     
-        # Add Kubernetes apt repository
-    - name: Add Kubernetes apt repository
-      copy:
-        dest: /etc/apt/sources.list.d/kubernetes.list
-        content: |
-          deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+    # Add docker apt repository
+    - name: Add docker apt repository
+      shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
     - name: Update apt cache
       apt:
