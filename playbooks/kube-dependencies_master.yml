@@ -74,6 +74,14 @@
         state: directory  # Ensure directory exists
         mode: '0755'  # Set directory permissions
 
+    - name: Add Docker repository to Apt sources
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    
+    - name: Add Docker repository to Apt sources
+      shell: |
+        chmod a+r /etc/apt/keyrings/docker.asc
+
     - name: Add docker apt repository signing key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
