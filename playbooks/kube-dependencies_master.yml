@@ -72,7 +72,7 @@
     
     # Add docker apt repository
     - name: Add docker apt repository
-      shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
     - name: Update apt cache
       apt:
