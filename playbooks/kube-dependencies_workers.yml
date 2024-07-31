@@ -2,8 +2,6 @@
 - name: Configure Kubernetes prerequisites
   hosts: tag_role_Master  # Target all hosts defined in your Ansible inventory
   become: true  # Run tasks with sudo privileges
-  vars: 
-    - ansible_hostname: master
 
   tasks:
 
