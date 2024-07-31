@@ -12,22 +12,11 @@
       blockinfile:
         path: /etc/kubernetes/kubeadm-config.yaml
         block: |
-             kind: ClusterConfiguration
-             apiVersion: kubeadm.k8s.io/v1beta3
-             networking:
-               podSubnet: "10.244.0.0/16"
-             ---
              kind: KubeletConfiguration
              apiVersion: kubelet.config.k8s.io/v1beta1
              runtimeRequestTimeout: "15m"
              cgroupDriver: "systemd"
-             resolvConf: /run/systemd/resolve/resolv.conf 
-             systemReserved:
-               cpu: 100m
-               memory: 350M
-             kubeReserved:
-               cpu: 100m
-               memory: 50M
+             resolvConf: /run/systemd/resolve/resolv.conf
              enforceNodeAllocatable:
              - pods
 
