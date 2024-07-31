@@ -81,12 +81,6 @@
     - name: Add Docker repository to Apt sources
       shell: |
         chmod a+r /etc/apt/keyrings/docker.asc
-
-    - name: Add docker apt repository signing key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-        keyring: /etc/apt/keyrings/docker.asc
     
     # Add docker apt repository
     - name: Add Docker repository to Apt sources
