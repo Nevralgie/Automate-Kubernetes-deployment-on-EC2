@@ -47,6 +47,9 @@
     - name: Apply sysctl settings
       command: sysctl --system  # Run sysctl to apply changes
 
+    - name: Ensure no conflicting package is installed
+      shell: for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    
     # Update apt cache
     - name: Update apt cache
       apt:
@@ -63,16 +66,24 @@
         - ca-certificates
         - curl
         - gpg
+    
+    # Create directory for apt keyring
+    - name: Create apt keyring directory
+      file:
+        path: "/etc/apt/keyrings"  # Directory path
+        state: directory  # Ensure directory exists
+        mode: '0755'  # Set directory permissions
 
-    - name: Add Kubernetes apt repository signing key
+    - name: Add docker apt repository signing key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-        keyring: /etc/apt/trusted.gpg.d/docker.gpg
+        keyring: /etc/apt/keyrings/docker.asc
     
     # Add docker apt repository
-    - name: Add docker apt repository
-      shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - name: Add Docker repository to Apt sources
+      shell: |
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     - name: Update apt cache
       apt:
@@ -104,12 +115,6 @@
         enabled: yes
         daemon_reload: yes
 
-    # Create directory for apt keyring
-    - name: Create apt keyring directory
-      file:
-        path: "/etc/apt/keyrings"  # Directory path
-        state: directory  # Ensure directory exists
-        mode: '0755'  # Set directory permissions
     
     - name: Add Kubernetes apt repository signing key
       apt_key:
