@@ -62,7 +62,19 @@
         - gnupg2
         - ca-certificates
         - curl
-        - containerd
+
+    - name: Add Kubernetes apt repository signing key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        keyring: /etc/apt/trusted.gpg.d/docker.gpg
+    
+        # Add Kubernetes apt repository
+    - name: Add Kubernetes apt repository
+      copy:
+        dest: /etc/apt/sources.list.d/kubernetes.list
+        content: |
+          deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
 
     - name: Create directory for containerd configuration
       file:
