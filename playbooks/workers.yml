@@ -31,3 +31,12 @@
       command: "{{ join_command }}"
       environment:
         HOME: /home/ubuntu/
+
+- name: Apply calico CNI
+  hosts: tag_role_Master
+  become: yes
+  tasks: 
+    - name: Apply Calico manifest
+      command: kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+      environment:
+        HOME: /home/ubuntu/
