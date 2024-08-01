@@ -16,7 +16,7 @@
               CREATE DATABASE devdb;
               USE devdb;
               CREATE TABLE IF NOT EXISTS stock_data (Date DATE, Open FLOAT, High FLOAT, Low FLOAT, Close FLOAT, AdjClose FLOAT, Volume INT, StockName VARCHAR(10), PRIMARY KEY (Date, StockName));
-              CREATE USER 'workshop_reader'@'%' IDENTIFIED BY '@Cdevops_69100'; GRANT SELECT ON devdb TO 'workshop_reader'@'%';FLUSH PRIVILEGES;
+              CREATE USER 'workshop_reader'@'%' IDENTIFIED BY '@Cdevops_69100'; GRANT SELECT ON stock_data TO 'workshop_reader'@'%';FLUSH PRIVILEGES;
               INSERT INTO stock_data (Date, Open, High, Low, Close, AdjClose, Volume, StockName) VALUES ('2022-01-03', 177.830002, 182.880005, 177.710007, 182.009995, 179.953888, 104487900, 'AAPL');
               INSERT INTO stock_data (Date, Open, High, Low, Close, AdjClose, Volume, StockName) VALUES ('2022-01-03', 123.45, 125.67, 121.34, 124.56, 123.12, 56789012, 'MSFT');
               INSERT INTO stock_data (Date, Open, High, Low, Close, AdjClose, Volume, StockName) VALUES ('2022-01-03', 345.67, 356.78, 341.23, 350.11, 348.90, 12345678, 'AMZN');
