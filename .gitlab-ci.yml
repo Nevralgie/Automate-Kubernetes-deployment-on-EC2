@@ -20,8 +20,8 @@ build-docker-image:
   before_script:
     - echo $REGISTRY_TOKEN | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin # Connection au registry gitlab
   script:
-    - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v1.2_db ./app
-    - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v1.2_db
+    - docker build -t $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v1.3_db ./app
+    - docker push $CI_REGISTRY/ara1504621/terraform-test/app_temoin:v1.3_db
   artifacts:
     paths:
       - .docker/config.json
