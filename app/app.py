@@ -19,7 +19,7 @@ img = io.BytesIO()
 # Define the stock names
 stock_names = ['AMZN', 'MSFT']  # Replace with your desired stock symbols
 
-MySQL connection details (hardcoded for now)
+# MySQL connection details (hardcoded for now)
 mysql_config = {
     'user': 'workshop_reader',
     'password': '@Cdevops_69100',
