@@ -23,7 +23,7 @@
               spec:
                 containers:
                   - name: dum-app-container
-                    image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v1.1_db
+                    image: registry.gitlab.com/ara1504621/terraform-test/app_temoin:v1.2_db
                     ports:
                       - containerPort: 5000  # The port your application is listening on
                 imagePullSecrets:
