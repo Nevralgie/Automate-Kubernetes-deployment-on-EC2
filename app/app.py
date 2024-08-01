@@ -19,7 +19,6 @@ img = io.BytesIO()
 # Define the stock names
 stock_names = ['AMZN', 'MSFT']  # Replace with your desired stock symbols
 
-# MySQL connection details (hardcoded for now)
 mysql_config = {
     'user': 'workshop_reader',
     'password': '@Cdevops_69100',
@@ -27,7 +26,7 @@ mysql_config = {
     'database': 'devdb'
 }
 
-Function to fetch stock data from MySQL
+
 def fetch_from_mysql(stock_name):
     conn = mysql.connector.connect(**mysql_config)
     cursor = conn.cursor()
