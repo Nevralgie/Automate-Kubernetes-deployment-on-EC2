@@ -196,6 +196,14 @@ resource "aws_vpc_security_group_ingress_rule" "local_ai" {
   to_port           = 8080
 }
 
+resource "aws_vpc_security_group_ingress_rule" "mysql_containerized_db" {
+  security_group_id = aws_security_group.kubernetes_workers.id
+  referenced_security_group_id = aws_security_group.kubernetes_workers.id
+  from_port         = 3306
+  ip_protocol       = "tcp"
+  to_port           = 3306
+}
+
 resource "aws_vpc_security_group_ingress_rule" "k8sgpt" {
   security_group_id = aws_security_group.kubernetes_workers.id
   referenced_security_group_id = aws_security_group.kubernetes_workers.id
