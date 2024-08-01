@@ -1,0 +1,19 @@
+# Only solution found to fix pods not resolving any addresses
+- name: Restart CoreDNS Deployment
+  hosts: tag_role_Master  # or your control plane node(s)
+  become: yes
+  tasks:
+    - name: Rollout restart CoreDNS deployment in kube-system namespace
+      command: kubectl -n kube-system rollout restart deployment coredns
+      register: rollout_result
+      failed_when: "'error' in rollout_result.stderr.lower() or rollout_result.rc != 0"
+      changed_when: "'deployment.apps/coredns restarted' in rollout_result.stdout"
+
+    - name: Ensure CoreDNS rollout completed successfully
+      command: kubectl -n kube-system rollout status deployment coredns
+      register: status_result
+      until: "status_result.stdout.find('successfully rolled out') != -1"
+      retries: 5
+      delay: 10
+      failed_when: "'error' in status_result.stderr.lower() or status_result.rc != 0"
+      changed_when: false
