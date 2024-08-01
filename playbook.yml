@@ -9,5 +9,6 @@
 - import_playbook: ./playbooks/hydrate_mysql.yml
 - import_playbook: ./playbooks/registry_secret.yml
 - import_playbook: ./playbooks/app.yml
+- import_playbook: ./playbooks/restart_core_dns.yml
 # - import_playbook: ./playbooks/localai.yml
 # - import_playbook: ./playbooks/k8sgpt.yml
