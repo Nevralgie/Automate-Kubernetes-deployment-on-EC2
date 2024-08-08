@@ -1,8 +1,5 @@
 from flask import Flask, render_template
-# import yfinance as yf
-import mysql.connector
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -26,8 +23,8 @@ mysql_config = {
     'database': 'devdb'
 }
 
-
-def fetch_from_mysql(stock_name):
+def fetch_data(stock_name):
+    # Fetch data from MySQL database
     conn = mysql.connector.connect(**mysql_config)
     cursor = conn.cursor()
 
@@ -48,16 +45,11 @@ def fetch_from_mysql(stock_name):
     cursor.close()
     conn.close()
     return data
+    pass
 
-# Perform stock market analysis for each stock name
-stock_data = {}
-for stock_name in stock_names:
-    # Fetch stock data
-    # data = yf.download(stock_name, start='2022-01-01', end='2023-01-01')
-    data = fetch_from_mysql(stock_name)
-    # print(data)
-
-# Calculate 50-day moving average
+def analyze_data(data):
+    # Perform stock market analysis on the data
+    # Calculate 50-day moving average
     data['MA50'] = data['Close'].rolling(window=50).mean()
 
     # Calculate 200-day moving average
@@ -96,13 +88,18 @@ for stock_name in stock_names:
     plt.close()
 
     # Store the data and plot URL
-    stock_data[stock_name] = {
+    stock_data = {
         'data': data[['RSI', 'MACD']].tail().to_html(),
         'plot_url': 'data:image/png;base64,{}'.format(plot_url)
     }
+    return stock_data
 
 @app.route('/')
 def index():
+    stock_data = {}
+    for stock_name in stock_names:
+        data = fetch_data(stock_name)
+        stock_data[stock_name] = analyze_data(data)
     return render_template('stock_analysis.html', stock_data=stock_data)
 
 if __name__ == '__main__':
