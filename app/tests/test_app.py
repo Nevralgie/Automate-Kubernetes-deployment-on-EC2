@@ -2,14 +2,16 @@ import pytest
 import pandas as pd
 from unittest.mock import patch
 from flask.testing import FlaskClient
-from app import app  # Replace with the actual name of your module
+from app import app  # Replace 'app' with the actual name of your module
 
+# Fixture for creating a test client
 @pytest.fixture
 def client() -> FlaskClient:
     app.config['TESTING'] = True
     with app.test_client() as client:
         yield client
 
+# Test index route, using mock for fetch_from_mysql
 @patch('app.fetch_from_mysql')
 def test_index(mock_fetch, client: FlaskClient):
     """Test the index route."""
@@ -23,6 +25,7 @@ def test_index(mock_fetch, client: FlaskClient):
     assert response.status_code == 200
     assert b'Stock Analysis' in response.data  # Check if the title or some known content is present
 
+# Test fetch_from_mysql directly, ensuring it's mocked
 @patch('app.fetch_from_mysql')
 def test_fetch_from_mysql(mock_fetch):
     """Test the data fetching from MySQL."""
