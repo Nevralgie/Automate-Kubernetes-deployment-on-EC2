@@ -1,10 +1,8 @@
 import pytest
-import io
-import base64
 import pandas as pd
-from flask import Flask
+from unittest.mock import patch
 from flask.testing import FlaskClient
-from app import app, fetch_from_mysql  # Replace 'your_app_module' with the actual name of your module
+from app import app  # Replace with the actual name of your module
 
 @pytest.fixture
 def client() -> FlaskClient:
@@ -12,16 +10,34 @@ def client() -> FlaskClient:
     with app.test_client() as client:
         yield client
 
-def test_index(client: FlaskClient):
+@patch('app.fetch_from_mysql')
+def test_index(mock_fetch, client: FlaskClient):
     """Test the index route."""
+    # Mock the return value of fetch_from_mysql
+    mock_fetch.return_value = pd.DataFrame({
+        'Date': pd.date_range(start='2024-01-01', periods=100),
+        'Close': pd.Series(range(100)) + 1
+    }).set_index('Date')
+
     response = client.get('/')
     assert response.status_code == 200
     assert b'Stock Analysis' in response.data  # Check if the title or some known content is present
 
-def test_fetch_from_mysql():
+@patch('app.fetch_from_mysql')
+def test_fetch_from_mysql(mock_fetch):
     """Test the data fetching from MySQL."""
     stock_name = 'AMZN'
-    data = fetch_from_mysql(stock_name)
+    mock_fetch.return_value = pd.DataFrame({
+        'Date': pd.date_range(start='2024-01-01', periods=100),
+        'Open': range(100),
+        'High': range(100),
+        'Low': range(100),
+        'Close': range(100),
+        'AdjClose': range(100),
+        'Volume': range(100)
+    }).set_index('Date')
+
+    data = mock_fetch(stock_name)
     assert isinstance(data, pd.DataFrame)
     assert not data.empty
     assert 'Date' in data.columns
@@ -89,4 +105,3 @@ def test_plot_generation():
 
     # Check if plot URL is a valid base64 string
     assert plot_url.startswith('iVBORw0KGgo=')
-
