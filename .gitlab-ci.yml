@@ -29,7 +29,7 @@ stages:
 #   tags:
 #     - build_job_docker
 
-build:
+build-docker-image:
   stage: build
   image: 
     name: docker:24.0.5
