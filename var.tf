@@ -11,7 +11,7 @@ variable "control_plane_instance_number" {
 }
 
 variable "worker_instance_number" {
-  description = "How many controlplane ?"
+  description = "How many workers ?"
   type = number
   default = 2
 }
