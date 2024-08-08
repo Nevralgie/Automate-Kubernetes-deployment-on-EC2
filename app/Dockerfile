@@ -3,11 +3,7 @@ FROM python:3.9 AS build
 
 WORKDIR /app
 
-RUN ls
-
-RUN pwd
-
-COPY ./app /app
+COPY . /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
@@ -19,7 +15,7 @@ ENV PYTHONPATH=/app
 # Run tests
 RUN pytest --tb=short --disable-warnings --junitxml=report.xml
 
-CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0"]
 
 # Stage 2: Production
 FROM python:3.9 AS production
@@ -30,10 +26,10 @@ WORKDIR /app
 RUN shopt -s extglob
 
 # Copy only necessary files from the build stage
-COPY ./app/!(tests) /app
+COPY ./!(tests) /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0"]
