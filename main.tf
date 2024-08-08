@@ -71,31 +71,6 @@ resource "aws_subnet" "sub_2_ec2_lb" {
   }
 }
 
-resource "aws_subnet" "RDS_sub1" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.3.0/28"
-  availability_zone = "eu-west-3b"
-  tags = {
-    Name = "RDS_sub1"
-  }
-}
-
-resource "aws_subnet" "RDS_sub2" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.4.0/28"
-  availability_zone = "eu-west-3c"
-  tags = {
-    Name = "RDS_sub2"
-  }
-}
-resource "aws_db_subnet_group" "default" {
-  name       = "main_db_grp"
-  subnet_ids = [aws_subnet.RDS_sub1.id, aws_subnet.RDS_sub2.id]
-
-  tags = {
-    Name = "DB subnet group"
-  }
-}
 
 resource "aws_security_group" "kubernetes_controlplane" {
   name        = "ctlplane_sg"
@@ -104,9 +79,17 @@ resource "aws_security_group" "kubernetes_controlplane" {
 }
 
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane_ec2_connect" {
   security_group_id = aws_security_group.kubernetes_controlplane.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = "35.180.112.80/29"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane_from_gitlab_runner" {
+  security_group_id = aws_security_group.kubernetes_controlplane.id
+  cidr_ipv4         = "172.31.32.99/32"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -228,9 +211,9 @@ resource "aws_vpc_security_group_ingress_rule" "nodeport_svc_2" {
   to_port           = 30131
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh_workers" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_workers_ec2_connect" {
   security_group_id = aws_security_group.kubernetes_workers.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = "35.180.112.80/29"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -242,42 +225,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4_out" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
-resource "aws_security_group" "rds_security_group" {
-  name        = "rds_security_group"
-  description = "Allow inbound traffic from EC2 security group"
-  vpc_id      = aws_vpc.main_vpc.id
-}
 
-resource "aws_vpc_security_group_ingress_rule" "allow_mysql" {
-  security_group_id = aws_security_group.rds_security_group.id
-  referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
-  from_port         = 3306
-  ip_protocol       = "tcp"
-  to_port           = 3306
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_out" {
-  security_group_id = aws_security_group.rds_security_group.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # semantically equivalent to all ports
-}
-/*
-resource "aws_db_instance" "default" {
-  allocated_storage    = 20
-  db_name              = "db_app"
-  identifier           = "devopsdb-app"
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = var.environment == "Prod" ? "db.t3.large" : "db.t3.micro"
-  username             = "admin"
-  password             = "vAdmintestv"
-  db_subnet_group_name = aws_db_subnet_group.default.name
-  multi_az             = false
-  vpc_security_group_ids = [aws_security_group.rds_security_group.id]
-  skip_final_snapshot  = var.environment == "Prod" ? false : true
-  final_snapshot_identifier = var.environment == "Prod" ? "Db_snapshot" : null
-}
-*/
 resource "aws_instance" "control_plane" {
   count         = var.control_plane_instance_number
   ami           = "ami-0326f9264af7e51e2"
@@ -332,29 +280,7 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
   }
 }
 
-/*
-# Outputs for RDS instance
-output "database_endpoint" {
-  description = "The endpoint of the database"
-  value       = aws_db_instance.default.endpoint
-}
 
-output "database_username" {
-  description = "The username of the database"
-  value       = aws_db_instance.default.username
-}
-
-# output "database_password" {
-#   description = "The password of the database"
-#   value       = aws_db_instance.default.password
-#   sensitive = true
-# }
-
-output "database_name" {
-  description = "The name of the database"
-  value       = aws_db_instance.default.db_name
-}
-*/
 output "ctrl_instance_name" {
   value = aws_instance.workers[*].tags
 }
@@ -383,9 +309,3 @@ resource "aws_route" "vpc2_route" {
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_gitlab_runner.id
 }
 
-# Associate the route tables with the subnets in the VPCs
-# Replace the subnet IDs with the actual IDs of the subnets in the VPCs
-
-data "aws_subnet" "gitlab_runner_sub" {
-  id = "subnet-0eea324505858e7f7"
-}

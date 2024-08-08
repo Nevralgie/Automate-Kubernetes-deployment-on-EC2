@@ -8,7 +8,6 @@
 - import_playbook: ./playbooks/restart_core_dns.yml
 - import_playbook: ./playbooks/mysql-db-deployment.yml
 - import_playbook: ./playbooks/hydrate_mysql.yml
-- import_playbook: ./playbooks/restart_core_dns.yml
 - import_playbook: ./playbooks/registry_secret.yml
 - import_playbook: ./playbooks/app.yml
 - import_playbook: ./playbooks/restart_deployments.yml
