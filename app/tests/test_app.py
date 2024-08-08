@@ -11,20 +11,15 @@ def client() -> FlaskClient:
     with app.test_client() as client:
         yield client
 
-# Test index route
+# Mock fetch_from_mysql and test index route
 @patch('app.fetch_from_mysql')
 def test_index(mock_fetch, client: FlaskClient):
-    """Test the index route."""
+    """Test the index route with mocked database fetch."""
     
     # Create dummy data
     dummy_data = pd.DataFrame({
         'Date': pd.date_range(start='2024-01-01', periods=100),
-        'Open': range(100),
-        'High': range(100),
-        'Low': range(100),
-        'Close': range(100),
-        'AdjClose': range(100),
-        'Volume': range(100)
+        'Close': range(100)
     })
     dummy_data.set_index('Date', inplace=True)
     dummy_data['MA50'] = dummy_data['Close'].rolling(window=50).mean()
@@ -50,10 +45,10 @@ def test_index(mock_fetch, client: FlaskClient):
     # Test for plot presence in response
     assert b'data:image/png;base64,' in response.data
 
-# Test fetch_data logic directly
+# Test fetch_data logic directly (isolated testing of data fetching and computations)
 @patch('app.fetch_from_mysql')
-def test_fetch_data(mock_fetch):
-    """Test the data fetching logic."""
+def test_data_computation(mock_fetch):
+    """Test data computations with mocked data."""
     
     # Dummy data
     dummy_data = pd.DataFrame({
@@ -61,25 +56,14 @@ def test_fetch_data(mock_fetch):
         'Close': pd.Series(range(100)) + 1
     })
     dummy_data.set_index('Date', inplace=True)
+    
+    # Mock fetch_from_mysql to return dummy data
     mock_fetch.return_value = dummy_data
     
-    # Test the function directly
+    # Fetch the data using the mocked function
     data = mock_fetch('AMZN')
-    assert isinstance(data, pd.DataFrame)
-    assert not data.empty
-    assert 'Close' in data.columns
-
-def test_stock_data_computation():
-    """Test the stock data computations (e.g., moving averages, RSI)."""
     
-    # Simulate data fetching
-    data = pd.DataFrame({
-        'Date': pd.date_range(start='2024-01-01', periods=100),
-        'Close': pd.Series(range(100)) + 1
-    })
-    data.set_index('Date', inplace=True)
-
-    # Calculate indicators
+    # Perform computations
     data['MA50'] = data['Close'].rolling(window=50).mean()
     data['MA200'] = data['Close'].rolling(window=200).mean()
     delta = data['Close'].diff(1)
@@ -104,8 +88,9 @@ def test_stock_data_computation():
     assert 'UpperBB' in data.columns
     assert 'LowerBB' in data.columns
 
+# Test plot generation
 def test_plot_generation():
-    """Test the plot generation."""
+    """Test the plot generation logic."""
     import matplotlib.pyplot as plt
     import io
     import base64
@@ -124,4 +109,11 @@ def test_plot_generation():
     plt.plot(data['Close'], label='Close Price')
     plt.plot(data['MA50'], label='50-day MA')
     plt.title('Test Plot')
-    plt.legend
+    plt.legend()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    plt.close()
+
+    assert plot_url.startswith('data:image/png;base64,')
+
