@@ -47,7 +47,7 @@ def fetch_data(stock_name):
     return data
     pass
 
-def analyze_data(data):
+def analyze_data(data,stock_name):
     # Perform stock market analysis on the data
     # Calculate 50-day moving average
     data['MA50'] = data['Close'].rolling(window=50).mean()
@@ -99,7 +99,7 @@ def index():
     stock_data = {}
     for stock_name in stock_names:
         data = fetch_data(stock_name)
-        stock_data[stock_name] = analyze_data(data)
+        stock_data[stock_name] = analyze_data(data, stock_name)
     return render_template('stock_analysis.html', stock_data=stock_data)
 
 if __name__ == '__main__':
