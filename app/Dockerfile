@@ -23,7 +23,7 @@ FROM python:3.9 AS production
 # Set the working directory
 WORKDIR /app
 
-RUN shopt -s extglob && cp -r ./!(tests) /app
+RUN shopt -s extglob && cp -r "./!(tests)" /app
 
 # # Copy only necessary files from the build stage
 # COPY ./!(tests) /app
