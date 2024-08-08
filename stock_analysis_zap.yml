@@ -1,0 +1,69 @@
+# ZAP Automation Template for the Python Flask Stock Analysis App
+
+env:
+  contexts:
+  - name: "stockAnalysisContext"
+    urls:
+    - "http://stock_analysis:5000/"
+    includePaths:
+    - "http://stock_analysis:5000/.*"
+    excludePaths: []
+    authentication:
+      parameters: {}
+      verification:
+        method: "response"
+        pollFrequency: 60
+        pollUnits: "requests"
+    sessionManagement:
+      method: "cookie"
+      parameters: {}
+  parameters:
+    failOnError: true
+    failOnWarning: false
+    progressToStdout: true
+
+jobs:
+- type: alertFilter
+  alertFilters:
+    - ruleId: 10021
+      ruleName: "X-Content-Type-Options Header Missing"
+      newRisk: "False Positive"
+      url: "http://stock_analysis:5000/.*"
+      urlRegex: true
+
+- name: "ajaxSpider"
+  type: spiderAjax
+  parameters:
+    inScopeOnly: true
+    context: "stockAnalysisContext"
+    maxCrawlDepth: 5
+    maxDuration: 0  # 0 means no limit
+
+- name: "activeScan"
+  type: activeScan
+  parameters:
+    context: "stockAnalysisContext"
+  policyDefinition:
+    rules: []
+
+- name: "combinedReport"
+  type: report
+  parameters:
+    template: "traditional-html"
+    reportDir: "/zap/reports/"
+    reportFile: "combinedHtmlReport"
+    reportTitle: "Combined ZAP Scanning Report"
+    reportDescription: "Combined results from AJAX Spider and Active Scan"
+    displayReport: false
+  risks:
+  - "info"
+  - "low"
+  - "medium"
+  - "high"
+  confidences:
+  - "falsepositive"
+  - "low"
+  - "medium"
+  - "high"
+  sites: []
+  type: report
