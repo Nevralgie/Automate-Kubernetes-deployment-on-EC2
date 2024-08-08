@@ -1,7 +1,10 @@
 import pytest
-import pandas as pd
 from flask.testing import FlaskClient
 from unittest.mock import patch
+import pandas as pd
+import io
+import base64
+import matplotlib.pyplot as plt
 from app import app
 
 # Fixture for creating a test client
@@ -45,7 +48,7 @@ def test_index(mock_fetch, client: FlaskClient):
     # Test for plot presence in response
     assert b'data:image/png;base64,' in response.data
 
-# Test fetch_data logic directly (isolated testing of data fetching and computations)
+# Test data computations with mocked data
 @patch('app.fetch_from_mysql')
 def test_data_computation(mock_fetch):
     """Test data computations with mocked data."""
@@ -116,4 +119,3 @@ def test_plot_generation():
     plt.close()
 
     assert plot_url.startswith('data:image/png;base64,')
-
