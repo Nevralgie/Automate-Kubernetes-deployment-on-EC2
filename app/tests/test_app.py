@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import pandas as pd
 from app import app
 
@@ -9,17 +9,26 @@ def client():
     with app.test_client() as client:
         yield client
 
-@patch('app.fetch_from_mysql')
-def test_index(mock_fetch, client):
-    # Create a mock DataFrame
-    mock_data = pd.DataFrame({
-        'Date': pd.date_range(start='2022-01-01', end='2023-01-01'),
-        'Close': [100, 101, 102, 103, 104]
-    })
-    mock_data.set_index('Date', inplace=True)
+@patch('mysql.connector.connect')
+def test_index(mock_connect, client):
+    # Create a mock connection object
+    mock_conn = MagicMock()
 
-    # Set the return value of the mock function
-    mock_fetch.return_value = mock_data
+    # Create a mock cursor object
+    mock_cursor = MagicMock()
+
+    # Set the return value of the mock cursor's fetchall method
+    mock_cursor.fetchall.return_value = [
+        ('2022-01-01', 100, 101, 99, 100, 100, 1000),
+        ('2022-01-02', 101, 102, 100, 101, 101, 1100),
+        # Add more rows as needed
+    ]
+
+    # Set the return value of the mock connection's cursor method
+    mock_conn.cursor.return_value = mock_cursor
+
+    # Set the return value of the mock connect function
+    mock_connect.return_value = mock_conn
 
     response = client.get('/')
     assert response.status_code == 200
