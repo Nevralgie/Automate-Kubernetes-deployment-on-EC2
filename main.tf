@@ -89,7 +89,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane_ec2_connect" 
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ctlplane_from_gitlab_runner" {
   security_group_id = aws_security_group.kubernetes_controlplane.id
-  cidr_ipv4         = "172.31.32.99/32"
+  cidr_ipv4         = "35.181.45.65/32"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
