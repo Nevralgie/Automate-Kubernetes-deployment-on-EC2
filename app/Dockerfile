@@ -3,7 +3,7 @@ FROM python:3.9 AS build
 
 WORKDIR /app
 
-COPY . /app
+COPY /app /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
@@ -23,8 +23,10 @@ FROM python:3.9 AS production
 # Set the working directory
 WORKDIR /app
 
+RUN shopt -s extglob
+
 # Copy only necessary files from the build stage
-COPY ./!(tests) /app
+COPY app/!(tests) /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
