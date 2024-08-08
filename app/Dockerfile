@@ -8,7 +8,7 @@ COPY . /app
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Install test dependencies separately (optional)
-RUN pip3 install --no-cache-dir pytest pytest-flask requests-mock app
+RUN pip3 install --no-cache-dir pytest pytest-flask requests-mock app unittest
 
 ENV PYTHONPATH=/app
 
