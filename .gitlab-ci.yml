@@ -33,11 +33,11 @@ build-docker-image:
   stage: build
   image: 
     name: docker:24.0.5
-  services:
-    - docker:dind
-  variables: 
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+  # services:
+  #   - docker:dind
+  # variables: 
+  #   DOCKER_DRIVER: overlay2
+  #   DOCKER_TLS_CERTDIR: ""
   before_script:
     - echo $REGISTRY_TOKEN | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin
     - docker network create test_env
