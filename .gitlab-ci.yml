@@ -54,7 +54,7 @@ build-docker-image:
     - docker logout
     - docker run --rm --name owaspzap --network test_env -v $(pwd):/zap/reports/:rw -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable bash -c "zap.sh -cmd -addonupdate; zap.sh -cmd -quickurl http://stock_analysis:5000 -autorun /zap/wrk/stock_analysis_zap.yml"
     - ls -la
-    - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin
+    - echo "$REGISTRY_TOKEN" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin
     - docker push $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE:rcandidate
   tags:
     - build_job_docker
@@ -142,7 +142,7 @@ deploy_app:
     - ansible -m ping all
     - ansible-inventory --list
     - ansible-inventory --graph
-    - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" # -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
+    - ansible-playbook -i inventory.aws_ec2.yaml playbook.yml # -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
   needs:
     - job: build-docker-image
       artifacts: true

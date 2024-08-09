@@ -26,6 +26,7 @@ WORKDIR /app
 # Copy only necessary files from the build stage
 COPY . /app
 
+# Remove tests sub-directory
 RUN rm -r /app/tests
 
 RUN pip3 install --no-cache-dir -r requirements.txt
