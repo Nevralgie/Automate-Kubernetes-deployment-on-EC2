@@ -48,7 +48,7 @@ build-docker-image:
     - docker ps
     - docker cp test_app_cont:/app/report.xml $CI_PROJECT_DIR/report.xml
     - docker rm -f test_app_cont
-    - docker build --target production -t $CI_REGISTRY/ara1504621/terraform-test$DOCKER_IMAGE ./app
+    - docker build --target production -t $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE ./app
     - docker run -d --name test_app_cont --hostname stock_analysis --network test_env -p 5000:5000 $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE
     - until docker run --network test_env --rm curlimages/curl curl http://stock_analysis:5000; do echo "Waiting for app to start..."; sleep 5; done
     - docker logout
