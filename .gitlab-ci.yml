@@ -64,6 +64,7 @@ build-docker-image:
       - ./app
       - combinedHtmlReport.html
       - report.xml
+      - .docker/config.json
 
 validate:
   stage: validate
