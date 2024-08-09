@@ -15,7 +15,7 @@ ENV PYTHONPATH=/app
 # Run tests
 RUN pytest --tb=short --disable-warnings --junitxml=report.xml
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
 
 # Stage 2: Production
 FROM python:3.9 AS production
@@ -23,13 +23,13 @@ FROM python:3.9 AS production
 # Set the working directory
 WORKDIR /app
 
-RUN shopt -s extglob && cp -r "./!(tests)" /app
+# Copy only necessary files from the build stage
+COPY . /app
 
-# # Copy only necessary files from the build stage
-# COPY ./!(tests) /app
+RUN rmdir -f /app/tests
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
