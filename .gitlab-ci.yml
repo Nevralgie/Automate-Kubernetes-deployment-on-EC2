@@ -48,14 +48,14 @@ build-docker-image:
     - docker ps
     - docker cp test_app_cont:/app/report.xml $CI_PROJECT_DIR/report.xml
     - docker rm -f test_app_cont
-    - docker build --target production -t $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE ./app
-    - docker run -d --name test_app_cont --hostname stock_analysis --network test_env -p 5000:5000 $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE
+    - docker build --target production -t $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE:rcandidate ./app
+    - docker run -d --name test_app_cont --hostname stock_analysis --network test_env -p 5000:5000 $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE:rcandidate
     - until docker run --network test_env --rm curlimages/curl curl http://stock_analysis:5000; do echo "Waiting for app to start..."; sleep 5; done
     - docker logout
     - docker run --rm --name owaspzap --network test_env -v $(pwd):/zap/reports/:rw -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable bash -c "zap.sh -cmd -addonupdate; zap.sh -cmd -quickurl http://stock_analysis:5000 -autorun /zap/wrk/stock_analysis_zap.yml"
     - ls -la
     - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin
-    - docker push $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE
+    - docker push $CI_REGISTRY/ara1504621/terraform-test/$DOCKER_IMAGE:rcandidate
   tags:
     - build_job_docker
   artifacts:
