@@ -4,7 +4,7 @@ variables:
 
 stages:
   # - build
-  # - validate
+  - validate
   - plan
   - apply
   - provision
@@ -79,7 +79,7 @@ stages:
 #       - .docker/config.json
 
 validate:
-  stage: build # validate
+  stage: validate
   before_script:
     - export TF_PASSWORD=${GITLAB_ACCESS_TOKEN}
     - cd $CI_PROJECT_DIR/Terraform_Infra
@@ -107,8 +107,7 @@ plan:
   script:
     - terraform plan
   needs:
-    # - validate
-    - build
+    - validate
   tags:
     - build_job_shell
 
