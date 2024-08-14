@@ -145,7 +145,7 @@ deploy_app:
   # image: python:3.9.17-slim-bullseye
   before_script:
     - export AWS_PROFILE=aws_profile
-    - export AWS_REGION='eu-west-3'
+    # - export AWS_REGION='eu-west-3'
     - export ANSIBLE_CONFIG=$CI_PROJECT_DIR/Ansible/ansible.cfg
     # - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
