@@ -149,8 +149,7 @@ deploy_app:
     - export AWS_REGION='eu-west-3'
     - export ANSIBLE_CONFIG=$CI_PROJECT_DIR/Ansible/ansible.cfg
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
-    # - eval $(ssh-agent -s)
-    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - cp $CI_PROJECT_DIR/.docker/config.json $CI_PROJECT_DIR/Ansible
   script:
     - aws sts get-caller-identity
     - ansible --version
