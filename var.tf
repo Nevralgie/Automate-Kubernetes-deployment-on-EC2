@@ -18,5 +18,5 @@ variable "worker_instance_number" {
 
 variable "gitlab_pat_token" {
   type = string
-  default = "${env("GITLAB_TOKEN")}"
+  default = env("GITLAB_TOKEN")
 }
