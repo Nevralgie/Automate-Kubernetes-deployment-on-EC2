@@ -144,14 +144,13 @@ deploy_app:
   stage: provision
   # image: python:3.9.17-slim-bullseye
   before_script:
+    # Set the profile and variable that will be used by Ansible and by the aws ec2 plugin
     - export AWS_PROFILE=aws_profile
-    # - export AWS_REGION='eu-west-3'
+    - export AWS_REGION='eu-west-3'
     - export ANSIBLE_CONFIG=$CI_PROJECT_DIR/Ansible/ansible.cfg
-    # - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "/home/gitlab-runner/.ssh/Pjpro_key"
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
+    # - eval $(ssh-agent -s)
+    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
   script:
     - aws sts get-caller-identity
     - ansible --version
