@@ -171,9 +171,11 @@ deploy_app:
 destroy:
   stage: destroy
   before_script:
+    - export TF_PASSWORD=${GITLAB_ACCESS_TOKEN}
+    - cd $CI_PROJECT_DIR/Terraform_Infra
     - rm -rf .terraform
     - terraform --version
-    - terraform init
+    - terraform init -backend-config=password=${TF_PASSWORD}
   script:
     - terraform destroy --auto-approve
   # needs:

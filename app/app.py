@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import pandas as pd
 import matplotlib.pyplot as plt
+import mysql.connector
 import io
 import base64
 import os
