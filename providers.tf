@@ -14,7 +14,7 @@ terraform {
     unlock_address = "https://gitlab.com/api/v4/projects/57372801/terraform/state/$TF_STATE_NAME/lock"
     username       = "Nevii"
     # password       = "glpat-YN-TMSUABaFEq9Te-7hG"
-    password       = var.gitlab_pat_token
+    password       = env("GITLAB_TOKEN")
     lock_method    = "POST"
     unlock_method  = "DELETE"
     retry_wait_min = 5
