@@ -121,13 +121,6 @@ resource "aws_vpc_security_group_ingress_rule" "k8sgpt" {
   to_port           = 8443
 }
 
-resource "aws_vpc_security_group_ingress_rule" "nodeport_svc" {
-  security_group_id = aws_security_group.kubernetes_workers.id
-  referenced_security_group_id = aws_security_group.kubernetes_controlplane.id
-  from_port         = 30000
-  ip_protocol       = "tcp"
-  to_port           = 32767
-}
 
 resource "aws_vpc_security_group_ingress_rule" "nodeport_svc_2" {
   security_group_id = aws_security_group.kubernetes_workers.id
