@@ -92,7 +92,7 @@ validate:
     - terraform validate
   tags:
     - build_job_shell
-    
+
 plan:
   stage: plan
   image:
@@ -107,7 +107,8 @@ plan:
   script:
     - terraform plan
   needs:
-    - validate
+    # - validate
+    - build
   tags:
     - build_job_shell
 
