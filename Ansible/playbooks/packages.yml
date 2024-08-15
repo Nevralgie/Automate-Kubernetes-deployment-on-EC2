@@ -4,6 +4,11 @@
   become: yes
   tasks:
 
+    - name: Download Helm GPG key
+      apt_key:
+        url: https://baltocdn.com/helm/signing.asc
+        state: present
+
     - name: Add Helm apt repository
       apt_repository:
         repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
@@ -34,10 +39,10 @@
         name: curl
         state: present
 
-    - name: Download Helm GPG key
-      apt_key:
-        url: https://baltocdn.com/helm/signing.asc
-        state: present
+    # - name: Download Helm GPG key
+    #   apt_key:
+    #     url: https://baltocdn.com/helm/signing.asc
+    #     state: present
 
     # - name: Add Helm apt repository
     #   apt_repository:
