@@ -6,10 +6,26 @@
     - name: Wait for resources to start
       command: sleep 30
 
-    - name: Check deployed resources
-      command: kubectl get all -n default && kubectl get secret && kubectl get configmap --kubeconfig /etc/kubernetes/admin.conf
-      register: kubectl_result
+    - name: Check pods, svc, deployments
+      command: kubectl get all -n default --kubeconfig /etc/kubernetes/admin.conf
+      register: kubectl_all_result
+    
+    - name: Check secret
+      command: kubectl get secret --kubeconfig /etc/kubernetes/admin.conf
+      register: kubectl_secret_result
+
+    - name: Check ConfigMap
+      command: kubectl get configmap --kubeconfig /etc/kubernetes/admin.conf
+      register: kubectl_configmap_result
 
     - name: Display resources deployed in K8s
       debug:
-        msg: "{{ kubectl_result.stdout }}"
+        msg: "{{ kubectl_all_result.stdout }}"
+    
+    - name: Display secret created in K8s
+      debug:
+        msg: "{{ kubectl_secret_result.stdout }}"
+
+    - name: Display configmap created in K8s
+      debug:
+        msg: "{{ kubectl_configmap_resultstdout }}"
