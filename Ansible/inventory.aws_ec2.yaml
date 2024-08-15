@@ -5,6 +5,7 @@ aws_access_key: ''
 aws_secret_key: ''
 session_token: ''
 remote_user: ubuntu
+# Set region again despite exporting the variable in the pipeline, or it won't work
 regions: 
   - eu-west-3
 # Group the instances based on tags
