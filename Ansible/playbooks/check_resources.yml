@@ -7,7 +7,7 @@
       command: sleep 30
 
     - name: Check pods
-      command: kubectl get pods -n default -o name --kubeconfig /etc/kubernetes/admin.conf
+      command: kubectl get pods -n default -o wide --kubeconfig /etc/kubernetes/admin.conf
       register: kubectl_pods_result
     
     - name: Check secret
