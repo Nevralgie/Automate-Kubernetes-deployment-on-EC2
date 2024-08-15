@@ -52,6 +52,15 @@
             selector:
               app: mysql
     
+    - name: Rollout restart CoreDNS deployment in kube-system namespace
+      command: kubectl -n kube-system rollout restart deployment coredns
+      register: rollout_result
+      failed_when: "'error' in rollout_result.stderr.lower() or rollout_result.rc != 0"
+      changed_when: "'deployment.apps/coredns restarted' in rollout_result.stdout"
+    
+    - name: Wait for coredns to restart
+      command: sleep 20
+    
     - name: Create ephemeral container to test the connection to the database
       kubernetes.core.k8s:
         state: present
