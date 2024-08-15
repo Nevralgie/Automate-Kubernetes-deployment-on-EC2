@@ -3,7 +3,13 @@
   hosts: tag_role_Master
   become: yes
   tasks:
-  
+
+    - name: Add Helm apt repository
+      apt_repository:
+        repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
+        state: present
+        filename: "helm-stable-debian"
+
     - name: Update apt cache
       apt:
         update_cache: yes
@@ -33,15 +39,15 @@
         url: https://baltocdn.com/helm/signing.asc
         state: present
 
-    - name: Add Helm apt repository
-      apt_repository:
-        repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
-        state: present
-        filename: "helm-stable-debian"
+    # - name: Add Helm apt repository
+    #   apt_repository:
+    #     repo: "deb https://baltocdn.com/helm/stable/debian/ all main"
+    #     state: present
+    #     filename: "helm-stable-debian"
 
-    - name: Update apt cache
-      apt:
-        update_cache: yes
+    # - name: Update apt cache
+    #   apt:
+    #     update_cache: yes
 
     - name: Install Helm
       apt:

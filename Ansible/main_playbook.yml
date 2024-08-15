@@ -1,9 +1,9 @@
 ---
-# - import_playbook: ./playbooks/host_conf.yml
-# - import_playbook: ./playbooks/kube-dependencies_master.yml
-# - import_playbook: ./playbooks/kube-dependencies_workers.yml
-# - import_playbook: ./playbooks/master.yml
-# - import_playbook: ./playbooks/workers.yml
+- import_playbook: ./playbooks/host_conf.yml
+- import_playbook: ./playbooks/kube-dependencies_master.yml
+- import_playbook: ./playbooks/kube-dependencies_workers.yml
+- import_playbook: ./playbooks/master.yml
+- import_playbook: ./playbooks/workers.yml
 - import_playbook: ./playbooks/packages.yml
 - import_playbook: ./playbooks/mysql-db-deployment.yml
 - import_playbook: ./playbooks/hydrate_mysql.yml
