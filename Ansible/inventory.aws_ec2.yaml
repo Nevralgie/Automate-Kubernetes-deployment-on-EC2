@@ -6,8 +6,8 @@ aws_secret_key: ''
 session_token: ''
 # profile: 'aws_profile'
 remote_user: ubuntu
-# regions: 
-#   - eu-west-3
+regions: 
+  - eu-west-3
 # Group the instances based on tags
 keyed_groups:
   - key: tags['role']
