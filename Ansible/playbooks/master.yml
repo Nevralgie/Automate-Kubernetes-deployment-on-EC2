@@ -8,7 +8,7 @@
         dest: /etc/kubernetes/kubeadm-config.yaml
         force: no
 
-    - name: configuring the container runtime including its cgroup driver
+    - name: configuring the dns resolv file and the container runtime including its cgroup driver
       blockinfile:
         path: /etc/kubernetes/kubeadm-config.yaml
         block: |
