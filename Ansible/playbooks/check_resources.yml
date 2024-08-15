@@ -1,0 +1,15 @@
+- name: Restart Deployments
+  hosts: tag_role_Master  # or your control plane node(s)
+  become: yes
+  tasks:
+    
+    - name: Wait for resources to start
+      command: sleep 30
+
+    - name: Check deployed resources
+      command: kubectl get all -n default && kubectl get secret && kubectl get configmap --kubeconfig /etc/kubernetes/admin.conf
+      register: kubectl_result
+
+    - name: Display resources deployed in K8s
+      debug:
+        msg: "{{ kubectl_result.stdout }}"

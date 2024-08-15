@@ -87,7 +87,7 @@ validate:
     - terraform --version
     - terraform init -backend-config=password=${TF_PASSWORD}
   script:
-    - terraform destroy --auto-approve
+    # - terraform destroy --auto-approve
     - terraform fmt -recursive
     - terraform validate
   tags:

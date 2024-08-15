@@ -1,12 +1,13 @@
----
-- import_playbook: ./playbooks/host_conf.yml
-- import_playbook: ./playbooks/kube-dependencies_master.yml
-- import_playbook: ./playbooks/kube-dependencies_workers.yml
-- import_playbook: ./playbooks/master.yml
-- import_playbook: ./playbooks/workers.yml
-- import_playbook: ./playbooks/packages.yml
-- import_playbook: ./playbooks/mysql-db-deployment.yml
-- import_playbook: ./playbooks/hydrate_mysql.yml
-- import_playbook: ./playbooks/registry_secret.yml
-- import_playbook: ./playbooks/app.yml
-- import_playbook: ./playbooks/restart_deployments.yml
+# ---
+# - import_playbook: ./playbooks/host_conf.yml
+# - import_playbook: ./playbooks/kube-dependencies_master.yml
+# - import_playbook: ./playbooks/kube-dependencies_workers.yml
+# - import_playbook: ./playbooks/master.yml
+# - import_playbook: ./playbooks/workers.yml
+# - import_playbook: ./playbooks/packages.yml
+# - import_playbook: ./playbooks/mysql-db-deployment.yml
+# - import_playbook: ./playbooks/hydrate_mysql.yml
+# - import_playbook: ./playbooks/registry_secret.yml
+# - import_playbook: ./playbooks/app.yml
+# - import_playbook: ./playbooks/restart_deployments.yml
+- import_playbook: ./playbooks/check_resources.yml
