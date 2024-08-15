@@ -11,11 +11,11 @@
       register: kubectl_deployments_result
     
     - name: Check secret
-      command: kubectl get secret -o name --kubeconfig /etc/kubernetes/admin.conf
+      command: kubectl get secret gitlab-cred -o name --kubeconfig /etc/kubernetes/admin.conf
       register: kubectl_secret_result
 
     - name: Check ConfigMap
-      command: kubectl get configmap -o name --kubeconfig /etc/kubernetes/admin.conf
+      command: kubectl get configmap hydrate-script -o name --kubeconfig /etc/kubernetes/admin.conf
       register: kubectl_configmap_result
     
     - name: Check app service
