@@ -1,31 +1,30 @@
 plugin: amazon.aws.aws_ec2
 # Set empty values for credentials, as profile conflicts with access_keys with this plugin version
+# Credentials are recovered through the export AWS_PROFILE command in the pipeline. Region is set the same way
 aws_access_key: ''
 aws_secret_key: ''
 session_token: ''
-# module_defaults:
-#     group/aws:
-#       access_key: ''
-#       secret_key: ''
-#       session_token: ''
-#       profile: 'aws_profile'
-profile: 'aws_profile'
+# profile: 'aws_profile'
 remote_user: ubuntu
-regions: 
-  - eu-west-3
-# keyed_groups:
-#   - key: Name
-#     prefix: Control
-# include_filters:
-#   - tag:environment:
-#       - 'Dev'
+# regions: 
+#   - eu-west-3
+# Group the instances based on tags
 keyed_groups:
   - key: tags['role']
     prefix: tag_role
-strict: False
-  
-
+strict: False 
 compose:
   # Use the private IP address to connect to the host
   # (note: this does not modify inventory_hostname, which is set via I(hostnames))
   ansible_host: private_ip_address
+
+
+
+
+
+
+
+
+
+
+

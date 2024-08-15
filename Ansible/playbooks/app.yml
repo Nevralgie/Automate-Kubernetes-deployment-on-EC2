@@ -12,7 +12,7 @@
             name: app-container
             namespace: default
           spec:
-            replicas: 2
+            replicas: 4
             selector:
               matchLabels:
                 app: demo-app
