@@ -6,9 +6,9 @@
     - name: Wait for resources to start
       command: sleep 30
 
-    - name: Check pods
-      command: kubectl get pods -n default -o wide --kubeconfig /etc/kubernetes/admin.conf
-      register: kubectl_pods_result
+    - name: Check deployments
+      command: kubectl get deployments -n default --kubeconfig /etc/kubernetes/admin.conf
+      register: kubectl_deployments_result
     
     - name: Check secret
       command: kubectl get secret -o name --kubeconfig /etc/kubernetes/admin.conf
@@ -22,9 +22,9 @@
       command: kubectl get svc app-nodeport-service --kubeconfig /etc/kubernetes/admin.conf
       register: kubectl_svc_result
 
-    - name: Display pods deployed in K8s
+    - name: Display deployments deployed in K8s
       debug:
-        msg: "{{ kubectl_pods_result.stdout }}"
+        msg: "{{ kubectl_deployments_result.stdout }}"
     
     - name: Display secret created in K8s
       debug:
