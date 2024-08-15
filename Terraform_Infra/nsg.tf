@@ -138,15 +138,6 @@ resource "aws_vpc_security_group_ingress_rule" "k8sgpt" {
   to_port           = 8443
 }
 
-
-resource "aws_vpc_security_group_ingress_rule" "nodeport_svc_2" {
-  security_group_id = aws_security_group.kubernetes_workers.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 30131
-  ip_protocol       = "tcp"
-  to_port           = 30131
-}
-
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh_workers_ec2_connect" {
   security_group_id = aws_security_group.kubernetes_workers.id
   cidr_ipv4         = "35.180.112.80/29"

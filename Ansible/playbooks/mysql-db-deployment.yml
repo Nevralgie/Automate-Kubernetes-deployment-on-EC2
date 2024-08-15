@@ -53,7 +53,7 @@
               app: mysql
     
     - name: Rollout restart CoreDNS deployment in kube-system namespace
-      command: kubectl -n kube-system rollout restart deployment coredns
+      command: kubectl -n kube-system rollout restart deployment coredns --kubeconfig /etc/kubernetes/admin.conf
       register: rollout_result
       failed_when: "'error' in rollout_result.stderr.lower() or rollout_result.rc != 0"
       changed_when: "'deployment.apps/coredns restarted' in rollout_result.stdout"
