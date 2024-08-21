@@ -133,7 +133,7 @@ deploy_app:
     - export ANSIBLE_PRIVATE_KEY_FILE=~/.ssh/Pjpro_key
     # Copy the credential file exported as an artefact from the build job in the working dir
     # It will be used to create a secret for pulling our built Docker image 
-    # - cp $CI_PROJECT_DIR/.docker/config.json $CI_PROJECT_DIR/Ansible
+    - cp $CI_PROJECT_DIR/.docker/config.json $CI_PROJECT_DIR/Ansible
   script:
     # Make sure you are loged in your AWS account
     - aws sts get-caller-identity
@@ -144,8 +144,8 @@ deploy_app:
     # Run the playbook against the specified targets in inventory
     - ansible-playbook -i $CI_PROJECT_DIR/Ansible/inventory.aws_ec2.yaml $CI_PROJECT_DIR/Ansible/main_playbook.yml                 # -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
   needs:
-    # - job: build-docker-image
-    #   artifacts: true
+    - job: build-docker-image
+      artifacts: true
     - job: apply
       artifacts: true
 
