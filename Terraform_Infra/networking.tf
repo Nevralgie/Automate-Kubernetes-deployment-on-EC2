@@ -35,15 +35,6 @@ resource "aws_subnet" "sub_1_ec2_lb" {
   }
 }
 
-resource "aws_subnet" "sub_2_ec2_lb" {
-  vpc_id     = aws_vpc.main_vpc.id
-  cidr_block = "10.0.2.0/24"
-  availability_zone = "eu-west-3c"
-  tags = {
-    Name = "lb_subnet"
-  }
-}
-
 resource "aws_vpc_peering_connection" "vpc_gitlab_runner" {
   peer_vpc_id   = data.aws_vpc.target_peering_vpc.id
   vpc_id        = aws_vpc.main_vpc.id
