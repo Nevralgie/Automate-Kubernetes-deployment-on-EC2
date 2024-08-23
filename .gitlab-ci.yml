@@ -139,10 +139,10 @@ deploy_app:
     - aws sts get-caller-identity
     # Make sure Ansible is installed and targets are correctly setup
     - ansible --version
-    - ansible -m ping all
+    - ansible all -i inventory.yml -m ping
     - ansible-inventory --list && ansible-inventory --graph
     # Run the playbook against the specified targets in inventory
-    - ansible-playbook -i $CI_PROJECT_DIR/Ansible/inventory.aws_ec2.yaml $CI_PROJECT_DIR/Ansible/main_playbook.yml                 # -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
+    - ansible-playbook -i $CI_PROJECT_DIR/Ansible/inventory.aws_ec2.yaml $CI_PROJECT_DIR/Ansible/main_playbook.yml # -e "volume_id=$EBS_PERSISTENT_VOLUME_ID" -e key_path=.docker/config.json -e "@vars.env" -e "node_config_file=config.yaml"
   needs:
     - job: build-docker-image
       artifacts: true
