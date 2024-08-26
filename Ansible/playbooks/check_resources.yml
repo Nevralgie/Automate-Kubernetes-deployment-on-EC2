@@ -1,5 +1,5 @@
 - name: Restart Deployments
-  hosts: tag_role_Master  # or your control plane node(s)
+  hosts: tag_role_Master
   become: yes
   tasks:
     

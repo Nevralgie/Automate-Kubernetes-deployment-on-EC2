@@ -18,11 +18,6 @@
     - name: remove swap
       command: /sbin/swapoff -a
 
-    # - name: TCP port 6443 on master is reachable from worker
-    #   wait_for: 
-    #     host: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
-    #     port: 6443
-    #     timeout: 1
     - name: fetch join command from master
       set_fact:
         join_command: "{{ hostvars[groups['tag_role_Master'][0]].join_command }}"

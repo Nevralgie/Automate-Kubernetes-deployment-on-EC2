@@ -25,7 +25,7 @@
                   - name: dum-app-container
                     image: registry.gitlab.com/ara1504621/terraform-test/graph_stock_pyapp_devenv1.0:rcandidate
                     ports:
-                      - containerPort: 5000  # The port your application is listening on
+                      - containerPort: 5000
                 imagePullSecrets:
                   - name: gitlab-cred
 
@@ -45,5 +45,5 @@
               app: demo-app
             ports:
               - protocol: TCP
-                port: 5000  # The port on which the service will be exposed
-                targetPort: 5000  # The port your application is listening on
+                port: 5000
+                targetPort: 5000

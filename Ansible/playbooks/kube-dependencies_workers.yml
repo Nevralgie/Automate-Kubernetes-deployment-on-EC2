@@ -1,7 +1,7 @@
 ---
 - name: Configure Kubernetes prerequisites
-  hosts: tag_role_Worker # Target all hosts defined in your Ansible inventory
-  become: true  # Run tasks with sudo privileges
+  hosts: tag_role_Worker 
+  become: true  
 
   tasks:
 
@@ -9,7 +9,6 @@
       lineinfile:
         dest: /etc/hosts
         line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
-        # line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
         state: present
 
     - name: Configure modules for Containerd by adding them to /etc/modules-load.d/containerd.conf
@@ -26,10 +25,9 @@
         - overlay
         - br_netfilter
 
-    # Configure sysctl settings for Kubernetes
     - name: Configure sysctl settings
       copy:
-        dest: "/etc/sysctl.d/kubernetes.conf"  # Destination file path
+        dest: "/etc/sysctl.d/kubernetes.conf"
         content: |
           net.ipv4.ip_forward = 1
           net.bridge.bridge-nf-call-ip6tables = 1
@@ -41,23 +39,21 @@
         state: absent
         regexp: '^.*\sswap\s.*$'
 
-    # Apply sysctl settings
+  
     - name: Apply sysctl settings
-      command: sysctl --system  # Run sysctl to apply changes
+      command: sysctl --system
 
     - name: Ensure no conflicting package is installed
       shell: for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
     
-    # Update apt cache
     - name: Update apt cache
       apt:
-        update_cache: yes  # Update apt cache
+        update_cache: yes
 
-    # Install prerequisite packages for Kubernetes
     - name: Install prerequisite packages
       apt:
-        name: "{{ item }}"  # Package name
-        state: present  # Ensure package is present
+        name: "{{ item }}"
+        state: present
       loop:
         - apt-transport-https
         - gnupg2
@@ -65,12 +61,11 @@
         - curl
         - gpg
     
-    # Create directory for apt keyring
     - name: Create apt keyring directory
       file:
-        path: "/etc/apt/keyrings"  # Directory path
-        state: directory  # Ensure directory exists
-        mode: '0755'  # Set directory permissions
+        path: "/etc/apt/keyrings"
+        state: directory
+        mode: '0755'
 
     - name: Add Docker repository to Apt sources
       shell: |
@@ -80,7 +75,6 @@
       shell: |
         chmod a+r /etc/apt/keyrings/docker.asc
     
-    # Add docker apt repository
     - name: Add Docker repository to Apt sources
       shell: |
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -91,8 +85,8 @@
 
     - name: Install containerd packages
       apt:
-        name: containerd.io  # Package name
-        state: present  # Ensure package is present
+        name: containerd.io
+        state: present
     
     - name: Create directory for containerd configuration
       file:
@@ -122,24 +116,20 @@
         state: present
         keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     
-        # Add Kubernetes apt repository
     - name: Add Kubernetes apt repository
       copy:
         dest: /etc/apt/sources.list.d/kubernetes.list
         content: |
           deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
 
-    
-    # Update apt cache to enrich the list with added k8s packages
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    # Install Kubernetes components
     - name: Install Kubernetes components
       apt:
-        name: "{{ item }}"  # Package name
-        state: present  # Ensure package is present
+        name: "{{ item }}"
+        state: present
         allow_downgrade: yes
       loop:
         - kubelet=1.29.5-1.1

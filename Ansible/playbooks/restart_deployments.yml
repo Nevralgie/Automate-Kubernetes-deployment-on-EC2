@@ -1,6 +1,7 @@
 # Only solution found to fix pods not resolving any addresses
+# Restarting both the app deployment and the coredns one
 - name: Restart Deployments
-  hosts: tag_role_Master  # or your control plane node(s)
+  hosts: tag_role_Master
   become: yes
   tasks:
     - name: Rollout restart CoreDNS deployment in kube-system namespace
